@@ -1,0 +1,36 @@
+{
+  "name": "computer-use-automation-system",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Discover a UI flow once with an LLM, record it as a typed capability artifact, replay it deterministically with no LLM in the loop.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "discover": "tsx src/cli/discover.ts",
+    "replay": "tsx src/cli/replay.ts",
+    "operator": "tsx src/cli/operator.ts",
+    "agent-demo": "tsx src/cli/agent-demo.ts",
+    "catalog": "tsx src/cli/catalog.ts",
+    "fixtures:serve": "tsx src/cli/serve-fixtures.ts",
+    "fixtures:capture": "tsx src/cli/capture-fixtures.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
+    "express": "^4.21.2",
+    "playwright": "^1.49.1",
+    "yaml": "^2.7.0",
+    "zod": "^3.24.1",
+    "zod-to-json-schema": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}
