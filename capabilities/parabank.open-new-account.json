@@ -1,0 +1,238 @@
+{
+  "schemaVersion": "1.0",
+  "id": "parabank.open-new-account",
+  "version": "1.0.0",
+  "name": "Open a new ParaBank account",
+  "description": "Opens a new checking or savings account funded from an existing account, and returns the new account number. Returns the LOGIN_FAILED outcome if the service credentials are rejected.",
+  "target": {
+    "app": "parabank",
+    "surfaceKind": "legacy-web",
+    "entryPoint": "/parabank/index.htm"
+  },
+  "inputs": {
+    "accountType": {
+      "type": "enum",
+      "enum": ["CHECKING", "SAVINGS"],
+      "description": "The kind of account to open.",
+      "required": true,
+      "sensitive": false
+    },
+    "fromAccountId": {
+      "type": "string",
+      "description": "Account number of the existing account that funds the minimum deposit.",
+      "required": true,
+      "sensitive": false
+    }
+  },
+  "outputs": {
+    "newAccountNumber": {
+      "type": "string",
+      "description": "The account number of the newly opened account."
+    }
+  },
+  "steps": [
+    {
+      "id": "step.open-entry-point",
+      "index": 0,
+      "intent": "load the ParaBank home page",
+      "action": { "type": "navigate", "url": "/parabank/index.htm" },
+      "checkpoint": { "kind": "textPresent", "text": "Customer Login" },
+      "risk": "safe",
+      "timeoutMs": 20000
+    },
+    {
+      "id": "step.enter-username",
+      "index": 1,
+      "intent": "enter the service account username",
+      "action": { "type": "fill", "value": { "secretRef": "PARABANK_USERNAME" } },
+      "locator": {
+        "primary": { "kind": "nearbyText", "text": "Username", "role": "textbox" },
+        "fallbacks": [{ "kind": "css", "selector": "input[name='username']" }],
+        "description": "Username field in the Customer Login panel",
+        "rationale": "The JSP login form has no <label for>; the caption is a sibling table cell, so nearbyText is the robust strategy and the name attribute is the fallback.",
+        "confidence": 0.9
+      },
+      "risk": "safe",
+      "timeoutMs": 10000
+    },
+    {
+      "id": "step.enter-password",
+      "index": 2,
+      "intent": "enter the service account password",
+      "action": { "type": "fill", "value": { "secretRef": "PARABANK_PASSWORD" } },
+      "locator": {
+        "primary": { "kind": "nearbyText", "text": "Password", "role": "textbox" },
+        "fallbacks": [{ "kind": "css", "selector": "input[name='password']" }],
+        "description": "Password field in the Customer Login panel",
+        "rationale": "Same table-cell caption pattern as the username field.",
+        "confidence": 0.9
+      },
+      "risk": "safe",
+      "timeoutMs": 10000
+    },
+    {
+      "id": "step.submit-login",
+      "index": 3,
+      "intent": "submit the login form",
+      "action": { "type": "click" },
+      "locator": {
+        "primary": { "kind": "role", "role": "button", "name": "Log In" },
+        "fallbacks": [{ "kind": "css", "selector": "input[value='Log In']" }],
+        "description": "Log In submit button",
+        "rationale": "The submit input carries an accessible name from its value attribute, so role+name works even on this legacy form.",
+        "confidence": 0.95
+      },
+      "checkpoint": { "kind": "textPresent", "text": "Accounts Overview" },
+      "onError": [
+        {
+          "when": "SESSION_EXPIRED",
+          "description": "ParaBank drops the jsessionid; reload the entry point and retry once.",
+          "do": [{ "action": { "type": "navigate", "url": "/parabank/index.htm" } }],
+          "thenRetry": true,
+          "maxAttempts": 1
+        }
+      ],
+      "risk": "safe",
+      "timeoutMs": 20000
+    },
+    {
+      "id": "step.go-to-open-account",
+      "index": 4,
+      "intent": "navigate to the Open New Account form",
+      "action": { "type": "click" },
+      "locator": {
+        "primary": { "kind": "role", "role": "link", "name": "Open New Account" },
+        "fallbacks": [{ "kind": "css", "selector": "a[href*='openaccount.htm']" }],
+        "description": "Open New Account link in the left-hand services menu",
+        "rationale": "role=link distinguishes this from the submit button of the same name on the destination page — the exact case where role+name beats text matching.",
+        "confidence": 0.95
+      },
+      "waitFor": {
+        "assertion": { "kind": "textPresent", "text": "Account Services" },
+        "timeoutMs": 10000
+      },
+      "checkpoint": { "kind": "urlMatches", "pattern": "openaccount\\.htm" },
+      "risk": "safe",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.choose-account-type",
+      "index": 5,
+      "intent": "choose the type of account to open",
+      "action": { "type": "select", "value": { "valueFrom": "$.inputs.accountType" } },
+      "locator": {
+        "primary": { "kind": "nearbyText", "text": "What type of account", "role": "combobox" },
+        "fallbacks": [{ "kind": "css", "selector": "select#type" }],
+        "description": "Account type dropdown",
+        "rationale": "The prompt text sits in a preceding cell rather than a label element; the id is stable today but is recorded only as a fallback so that drift onto it is visible.",
+        "confidence": 0.85
+      },
+      "risk": "safe",
+      "timeoutMs": 10000
+    },
+    {
+      "id": "step.choose-funding-account",
+      "index": 6,
+      "intent": "choose the existing account that funds the minimum deposit",
+      "action": { "type": "select", "value": { "valueFrom": "$.inputs.fromAccountId" } },
+      "locator": {
+        "primary": { "kind": "css", "selector": "select#fromAccountId" },
+        "fallbacks": [],
+        "description": "Funding account dropdown",
+        "rationale": "This control has no usable accessible name and no adjacent caption of its own, so css is the only available strategy. Confidence is recorded low to reflect that rather than papering over it.",
+        "confidence": 0.5
+      },
+      "risk": "safe",
+      "timeoutMs": 10000
+    },
+    {
+      "id": "step.submit-open-account",
+      "index": 7,
+      "intent": "submit the request to open the account",
+      "action": { "type": "click" },
+      "locator": {
+        "primary": { "kind": "role", "role": "button", "name": "Open New Account" },
+        "fallbacks": [{ "kind": "css", "selector": "input[value='Open New Account']" }],
+        "description": "Open New Account submit button",
+        "rationale": "role=button separates the submit control from the same-named navigation link in the services menu.",
+        "confidence": 0.9
+      },
+      "checkpoint": { "kind": "textPresent", "text": "Account Opened!" },
+      "risk": "irreversible",
+      "timeoutMs": 25000
+    },
+    {
+      "id": "step.read-new-account-number",
+      "index": 8,
+      "intent": "read back the new account number",
+      "action": { "type": "wait" },
+      "extract": [
+        {
+          "name": "newAccountNumber",
+          "from": {
+            "primary": { "kind": "css", "selector": "a#newAccountId" },
+            "fallbacks": [],
+            "description": "New account number link on the confirmation page",
+            "rationale": "The confirmation renders the number as a link with a stable id; there is no role+name handle for it.",
+            "confidence": 0.7
+          },
+          "as": "string",
+          "pattern": "(\\d{3,})"
+        }
+      ],
+      "risk": "safe",
+      "timeoutMs": 10000
+    }
+  ],
+  "outcomes": [
+    {
+      "name": "LOGIN_FAILED",
+      "description": "ParaBank rejected the service credentials. The app worked; the answer is no.",
+      "detect": { "kind": "textPresent", "text": "could not be verified" },
+      "terminal": true,
+      "extract": []
+    },
+    {
+      "name": "ACCOUNT_OPEN_REFUSED",
+      "description": "ParaBank declined to open the account, typically because the funding account cannot cover the minimum deposit.",
+      "detect": {
+        "kind": "all",
+        "of": [
+          { "kind": "urlMatches", "pattern": "openaccount\\.htm" },
+          { "kind": "textPresent", "text": "error" },
+          { "kind": "textAbsent", "text": "Account Opened!" }
+        ]
+      },
+      "terminal": true,
+      "extract": []
+    }
+  ],
+  "postcondition": {
+    "kind": "all",
+    "of": [
+      { "kind": "textPresent", "text": "Account Opened!" },
+      {
+        "kind": "elementVisible",
+        "locator": {
+          "primary": { "kind": "css", "selector": "a#newAccountId" },
+          "fallbacks": [],
+          "description": "New account number link",
+          "rationale": "The capability is only complete when the number it promises to return is actually on screen.",
+          "confidence": 0.7
+        }
+      }
+    ]
+  },
+  "policy": {
+    "riskClass": "irreversible",
+    "requiresApproval": true,
+    "allowedDomains": ["parabank.parasoft.com"]
+  },
+  "provenance": {
+    "discoveredAt": "2026-09-09T00:00:00Z",
+    "model": "hand-written",
+    "runId": "seed-000",
+    "evidenceRef": "n/a — hand-written seed artifact used to prove the schema and the replay engine before the discovery loop existed",
+    "humanEdits": []
+  }
+}
