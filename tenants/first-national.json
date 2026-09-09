@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "tenantId": "first-national",
+  "app": "parabank",
+  "appVersion": "6.2.1",
+  "baseUrl": "https://parabank.parasoft.com",
+  "secrets": {
+    "PARABANK_USERNAME": "env://PARABANK_USERNAME",
+    "PARABANK_PASSWORD": "env://PARABANK_PASSWORD"
+  },
+  "locale": {
+    "number": "en-US",
+    "date": "MM/dd/yyyy",
+    "currency": "USD"
+  },
+  "policy": {
+    "allowedDomains": ["parabank.parasoft.com"]
+  },
+  "overrides": {
+    "step.choose-account-type": {
+      "locator": {
+        "primary": { "kind": "css", "selector": "select[name='type']" },
+        "fallbacks": [{ "kind": "css", "selector": "select#type" }],
+        "description": "Account type dropdown (this institution's build renders it without the id)",
+        "rationale": "Local customisation: the 6.2.1 build on this tenant emits name= but not id= on the type select. A narrow per-step patch is the right size of fix — forking the artifact would give us a second copy to maintain.",
+        "confidence": 0.8
+      }
+    }
+  },
+  "disabledSteps": []
+}

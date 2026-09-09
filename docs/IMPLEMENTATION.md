@@ -3,8 +3,9 @@
 Execution tracker for `docs/PLAN.md`. Check items off as they complete.
 Resume rule: find the first unchecked box, do that.
 
-**State as of last session:** scaffolding done, dependencies installed. Next action is
-M0.7 (install Chromium) — or skip it and start M1, which needs no browser.
+**State as of last session:** M0 + M1 complete — 29 tests green, typecheck clean.
+Next action is M2 (Surface + locator engine), which is the first step needing Chromium
+(`npx playwright install chromium`, still unapproved).
 
 **Environment notes**
 - Node v23.7.0, npm 11.6.2, git 2.39.2 — all present.
@@ -24,19 +25,19 @@ M0.7 (install Chromium) — or skip it and start M1, which needs no browser.
 - [x] `vitest.config.ts`
 - [x] `.gitignore`, `.env.example`
 - [x] `npm install` (139 packages: zod, playwright, express, yaml, @anthropic-ai/sdk, zod-to-json-schema; tsx/vitest/typescript dev)
-- [ ] `npx playwright install chromium` *(needs approval; not required for M1)*
+- [ ] `npx playwright install chromium` *(needs approval; first required by M2)*
 - [ ] First commit of the scaffold
 
 ## M1 — Artifact schema + store
 
-- [ ] `src/artifact/schema.ts` — Zod `CapabilityArtifact`: `schemaVersion`, `id`, `version`, `name`, `description`, `target{app,surfaceKind,entryPoint,tenantBinding?}`, `inputs`, `outputs`, `steps[]`, `outcomes[]`, `postcondition`, `policy{riskClass,requiresApproval,allowedDomains}`, `provenance`, `reliability?`
-- [ ] `Step` — `id` (stable, index-independent), `index`, `intent`, `action{type,valueFrom?}`, `locator?`, `waitFor?`, `checkpoint?`, `extract?`, `onError?`, `risk`, `timeoutMs`
-- [ ] `Locator` / `Strategy` discriminated union — `role`, `label`, `placeholder`, `nearbyText`, `text`, `css`, `nth` (+ `confidence`, `rationale`)
-- [ ] `OutcomeSpec` with detector + `terminal` flag
-- [ ] `TenantBinding` schema — `tenantId`, `app`, `baseUrl`, `secrets`, `locale`, `policy` (stricter-only), `overrides` keyed by step id, `disabledSteps`
-- [ ] `src/artifact/store.ts` — load/save/list from `capabilities/`, validate on read, resolve tenant overrides
-- [ ] Hand-written example artifact `capabilities/parabank.open-new-account.json` (proves the schema before any LLM exists)
-- [ ] Tests: schema rejects malformed artifacts; tenant override resolution order (artifact → override → error); tenant policy cannot widen
+- [x] `src/artifact/schema.ts` — Zod `CapabilityArtifact`: `schemaVersion`, `id`, `version`, `name`, `description`, `target{app,surfaceKind,entryPoint,tenantBinding?}`, `inputs`, `outputs`, `steps[]`, `outcomes[]`, `postcondition`, `policy{riskClass,requiresApproval,allowedDomains}`, `provenance`, `reliability?`
+- [x] `Step` — `id` (stable, index-independent), `index`, `intent`, `action{type,valueFrom?}`, `locator?`, `waitFor?`, `checkpoint?`, `extract?`, `onError?`, `risk`, `timeoutMs`
+- [x] `Locator` / `Strategy` discriminated union — `role`, `label`, `placeholder`, `nearbyText`, `text`, `css`, `nth` (+ `confidence`, `rationale`)
+- [x] `OutcomeSpec` with detector + `terminal` flag
+- [x] `TenantBinding` schema — `tenantId`, `app`, `baseUrl`, `secrets`, `locale`, `policy` (stricter-only), `overrides` keyed by step id, `disabledSteps`
+- [x] `src/artifact/store.ts` — load/save/list from `capabilities/`, validate on read, resolve tenant overrides
+- [x] Hand-written example artifact `capabilities/parabank.open-new-account.json` (proves the schema before any LLM exists)
+- [x] Tests: schema rejects malformed artifacts; tenant override resolution order (artifact → override → error); tenant policy cannot widen
 
 ## M2 — Surface + locator engine
 
