@@ -1,0 +1,8 @@
+{
+  "* /parabank/index.htm": "index.htm",
+  "* /parabank/register.htm": "register.htm",
+  "* /parabank/openaccount.htm": "openaccount.htm",
+  "* /parabank/overview.htm": "overview.htm",
+  "* /parabank/requestloan.htm": "requestloan.htm",
+  "* /parabank/transfer.htm": "transfer.htm"
+}

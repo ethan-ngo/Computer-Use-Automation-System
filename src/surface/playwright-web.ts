@@ -185,12 +185,15 @@ export class PlaywrightWebSurface implements Surface {
 
     // Denied capabilities, enforced at the browser rather than by asking nicely.
     await context.route('**/*', (route) => route.continue());
-    context.on('page', async (extra) => {
-      // An unconstrained new tab is how automation escapes the surface it was scoped to.
-      if (extra !== page) await extra.close().catch(() => {});
-    });
 
+    // The listener is attached *after* the first page exists, because `newPage()` itself
+    // fires this event — registering earlier would run the handler against an unassigned
+    // binding and close nothing while raising an unhandled rejection.
     const page = await context.newPage();
+    context.on('page', (extra) => {
+      // An unconstrained new tab is how automation escapes the surface it was scoped to.
+      if (extra !== page) void extra.close().catch(() => {});
+    });
     page.on('dialog', (d) => void d.dismiss().catch(() => {}));
     page.on('download', (d) => void d.cancel().catch(() => {}));
 

@@ -3,16 +3,20 @@
 Execution tracker for `docs/PLAN.md`. Check items off as they complete.
 Resume rule: find the first unchecked box, do that.
 
-**State as of last session:** M0-M3, M6 and M7 complete — 94 tests green, typecheck clean.
-Next action is M4 + M5 (discovery loop + recorder). Two things are still blocked and
-neither is on the critical path for more code: capturing fixtures needs Chromium
-(`npx playwright install chromium`, still unapproved) and the live discovery run needs
-`ANTHROPIC_API_KEY`.
+**State as of last session:** M0-M7 complete — 110 tests green, typecheck clean. The
+discovery loop, the recorder and `npm run discover` are all written; fixtures are
+captured. The one thing outstanding is the **live** discovery run, blocked on API
+credits (see below). Next code action is M8 (escalation console).
 
 **Environment notes**
 - Node v23.7.0, npm 11.6.2, git 2.39.2 — all present.
-- `ANTHROPIC_API_KEY` is **not set**. Everything builds without it; only M4's live
-  discovery run needs it (`npm run discover`).
+- Chromium **is** installed (`chromium-1243` plus the headless shell).
+- `ANTHROPIC_API_KEY` is set in `.env` (gitignored) and now authenticates: the earlier
+  organization-scoped key was replaced with a default-workspace one. **The account has
+  no API credits**, so every call returns `invalid_request_error: Your credit balance is
+  too low`. Nothing else blocks `npm run discover`.
+- `ANTHROPIC_WORKSPACE_ID` is read by `newClient()` in `src/agent/loop.ts` if an
+  organization-scoped key is ever used again.
 - ParaBank reachable: `https://parabank.parasoft.com/parabank/index.htm` → HTTP 200.
 - Repo initialised, working on branch `build/capability-system`.
 
@@ -27,7 +31,7 @@ neither is on the critical path for more code: capturing fixtures needs Chromium
 - [x] `vitest.config.ts`
 - [x] `.gitignore`, `.env.example`
 - [x] `npm install` (139 packages: zod, playwright, express, yaml, @anthropic-ai/sdk, zod-to-json-schema; tsx/vitest/typescript dev)
-- [ ] `npx playwright install chromium` *(needs approval; first required by M2)*
+- [x] `npx playwright install chromium` (headed build plus the headless shell)
 - [ ] First commit of the scaffold
 
 ## M1 — Artifact schema + store
@@ -58,7 +62,13 @@ neither is on the critical path for more code: capturing fixtures needs Chromium
 - [x] `ReplayError` classes: `LOCATOR_NOT_FOUND`, `LOCATOR_AMBIGUOUS`, `CHECKPOINT_FAILED`, `TIMEOUT`, `SESSION_EXPIRED`, `UNEXPECTED_DIALOG`, `POLICY_DENIED`, `NAVIGATION_BLOCKED`, `APP_ERROR`, `STRUCTURAL_DIVERGENCE`, `RESUME_STATE_UNRECOGNIZED`
 - [x] Three-tier handling: recoverable (`onError` specs + bounded retry/backoff, re-login once on `SESSION_EXPIRED`) / business outcome / hard failure
 - [x] Budgets: step budget, wall clock, retry caps
-- [ ] Capture `fixtures/parabank/*.html` while the live site is up *(blocked on Chromium; `src/cli/capture-fixtures.ts` is written and its inertify pass is tested)*
+- [x] Capture `fixtures/parabank/*.html` while the live site is up — `index`, `register`,
+      `overview`, `openaccount`, `requestloan`, `transfer`. Needed two fixes: the CLI's
+      entrypoint guard never fired on Windows (hand-built `file://` URL vs. three-slash
+      `import.meta.url`), and the authenticated pages captured as ParaBank's error page
+      until `--login` was added. **Known limit:** `openaccount.htm`'s selects are
+      AJAX-populated and its submit is a JS `input[type=button]`, so with scripts stripped
+      the offline fixture exercises locator resolution and structure, not the live submit.
 - [x] `src/cli/serve-fixtures.ts` — static server for offline replay
 - [x] `src/replay/extract.ts` — typed extraction; locale-aware money/date parsing through the tenant binding *(not in the original plan; the alternative was untyped scraping, which is how locale bugs go silent)*
 - [x] `src/evidence/types.ts` — `RunEvent` / `RunLogger`, so the engine emits evidence without touching a filesystem
@@ -75,16 +85,20 @@ neither is on the critical path for more code: capturing fixtures needs Chromium
 
 ## M4 + M5 — Discovery loop + recorder
 
-- [ ] `src/agent/tools.ts` — closed vocabulary: `observe`, `navigate`, `click`, `fill`, `select`, `press`, `extract`, `declare_outcome`, `checkpoint`, `escalate_to_human`, `finish`
-- [ ] `src/agent/prompt.ts` — system prompt; page text framed as untrusted data
-- [ ] `src/agent/loop.ts` — `claude-opus-5`, `thinking: {type:"adaptive"}`, `output_config: {effort:"high"}`, prompt caching on the frozen tools+system prefix, streaming
-- [ ] Stopping conditions: `maxSteps` ~40, wall clock, no-progress detector (same URL + aria-hash N times → escalate)
-- [ ] Token control: numbered element list as text each turn; screenshot only on request or every N steps
-- [ ] `src/artifact/recorder.ts` — consumes the **structured action log**, never model prose: resolve locators + fallback chains from the live observation, synthesise checkpoints, canonicalise URLs (`?id=12345` → `{{accountId}}`), promote literals to `valueFrom` references
-- [ ] Ambiguity during discovery → escalate; the operator's pick is what gets recorded
-- [ ] `src/cli/discover.ts`
-- [ ] Live run: `npm run discover -- --goal "open a new savings account and read back the new account number" --target https://parabank.parasoft.com/parabank/index.htm` *(needs `ANTHROPIC_API_KEY`)*
+- [x] `src/agent/tools.ts` — closed vocabulary: `observe`, `navigate`, `click`, `fill`, `select`, `press`, `extract`, `declare_outcome`, `checkpoint`, `escalate_to_human`, `finish`
+- [x] `src/agent/prompt.ts` — system prompt; page text framed as untrusted data
+- [x] `src/agent/loop.ts` — `claude-opus-5`, `thinking: {type:"adaptive"}`, `output_config: {effort:"high"}`, prompt caching on the frozen tools+system prefix, streaming
+- [x] Stopping conditions: `maxSteps` ~40, wall clock, no-progress detector (same URL + aria-hash N times → escalate)
+- [x] Token control: numbered element list as text each turn; screenshot only on request or every N steps
+- [x] `src/artifact/recorder.ts` — consumes the **structured action log**, never model prose: resolve locators + fallback chains from the live observation, synthesise checkpoints, canonicalise URLs (`?id=12345` → `{{accountId}}`), promote literals to `valueFrom` references
+- [x] Ambiguity during discovery → escalate; the operator's pick is what gets recorded
+- [x] `src/cli/discover.ts`
+- [ ] Live run: `npm run discover -- --goal "open a new savings account and read back the new account number" --target https://parabank.parasoft.com/parabank/index.htm` *(blocked: no API credits on the account)*
 - [ ] Verify the recorded artifact replays
+- [x] Tests (`tests/recorder.test.ts`, 16): every synthesised strategy resolves through
+      `resolveLocator`; an ambiguous strategy is discarded rather than recorded; css-only
+      locators are low-confidence and say so; the stricter of model hint and policy pattern
+      wins on risk; secrets stay references; colliding intents get distinct step ids
 
 ## M8 — Escalation & handoff
 
@@ -99,7 +113,7 @@ neither is on the critical path for more code: capturing fixtures needs Chromium
 
 ## M9 — Evidence
 
-- [ ] `src/evidence/logger.ts` — `run.jsonl` (ts, phase, stepId, action, **which locator strategy resolved**, durationMs, outcome)
+- [x] `src/evidence/logger.ts` — `run.jsonl` (ts, phase, stepId, action, **which locator strategy resolved**, durationMs, outcome); every event passes through the redactor at the single write boundary. Written early because M4 needed it.
 - [ ] `src/evidence/capture.ts` — `steps/NNN-{before,after}.png`; on failure `failure.png` + `failure.html` + `failure.aria.yaml` + `trace.zip`
 - [ ] Control-transfer timeline written to the run log
 - [ ] Required deliverables in `evidence/`: one discovery run, one successful replay, one replay hitting an exceptional state (use a real ParaBank business outcome — loan denial or "no transactions found")
@@ -124,5 +138,12 @@ neither is on the critical path for more code: capturing fixtures needs Chromium
 
 ## Deferred / needs a decision
 
-- [ ] `npx playwright install chromium` was declined once — re-approve when ready, or point `PLAYWRIGHT_BROWSERS_PATH` at an existing install.
-- [ ] Live discovery needs `ANTHROPIC_API_KEY` in the environment (or `ant auth login`).
+- [ ] **Add API credits.** `ANTHROPIC_API_KEY` authenticates but the account balance is
+      zero, so every Messages/count_tokens call fails. This is the only thing standing
+      between here and the live discovery run.
+- [ ] `strict: true` on the discovery tool schemas is unverified against the live API.
+      The schemas carry optional properties alongside `required`; if the API rejects that
+      combination, drop `strict` in `src/agent/tools.ts`. Cannot be checked without credits.
+- [ ] `openaccount.htm` offline replay cannot complete the submit (AJAX selects, JS
+      button). Either record the exceptional-path demo against `requestloan.htm`'s real
+      loan-denial outcome, or keep scripts in that one fixture.
