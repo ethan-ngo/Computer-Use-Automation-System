@@ -21,7 +21,7 @@ import { LeaseManager } from '../escalation/lease.js';
 import { PlaywrightWebSurface } from '../surface/playwright-web.js';
 import { FileRunLogger } from '../evidence/logger.js';
 import { runDiscovery, type EscalationHandler } from '../agent/loop.js';
-import { recordArtifact } from '../artifact/recorder.js';
+import { recordArtifact, unverifiedOutcomes } from '../artifact/recorder.js';
 import { saveArtifact } from '../artifact/store.js';
 import type { DiscoveryLog } from '../agent/tools.js';
 
@@ -116,13 +116,20 @@ async function rerecord(runId: string): Promise<void> {
   const file = join(process.cwd(), 'evidence', 'runs', runId, 'discovery.json');
   const log = JSON.parse(await readFile(file, 'utf-8')) as DiscoveryLog;
 
+  const id = arg('id');
   const artifact = await recordArtifact(log, {
     policy,
     evidenceRef: `evidence/runs/${runId}`,
+    ...(id ? { id } : {}),
   });
   const out = await saveArtifact(artifact);
   console.log(`re-recorded ${artifact.id}@${artifact.version} from ${runId}`);
   console.log(`  → ${relative(process.cwd(), out)}`);
+
+  const unverified = unverifiedOutcomes(log);
+  if (unverified.length > 0) {
+    console.log(`  ⚠ unverified outcome detector(s): ${unverified.join(', ')}`);
+  }
 }
 
 async function main(): Promise<void> {
@@ -215,6 +222,38 @@ async function main(): Promise<void> {
     }
     if (artifact.policy.requiresApproval) {
       console.log('  contains irreversible steps — replay will require approval');
+    }
+
+    // Outcome detectors are the one part of the artifact discovery cannot verify: the run
+    // took the happy path, so the wording of a denial page was inferred, not read. Getting
+    // it wrong turns a business outcome back into a false alarm, so it is said out loud.
+    const unverified = unverifiedOutcomes(log);
+    if (unverified.length > 0) {
+      console.log(
+        `
+  ⚠ ${unverified.length} outcome detector(s) reference text this run never ` +
+          `observed — the wording was inferred and needs checking against the real page: ` +
+          unverified.join(', '),
+      );
+    }
+
+    // A run that did not reach `finish` still records what it managed to do, because a
+    // partial capability plus a clear warning beats losing the evidence. But it must not
+    // read as a success: this artifact covers part of a goal and has not been reviewed.
+    if (log.stoppedBecause !== 'finished') {
+      console.log(
+        `\n  ⚠ this run ended as "${log.stoppedBecause}", not "finished" — the capability ` +
+          `is PARTIAL and needs review before use.`,
+      );
+      for (const escalation of log.escalations) {
+        console.log(`    the agent asked: ${escalation.question}`);
+      }
+      process.exitCode = 2;
+    } else if (Object.keys(artifact.outputs).length === 0) {
+      console.log(
+        '\n  ⚠ this capability declares no outputs — it performs the flow but returns ' +
+          'nothing to its caller. Check that the goal did not ask for a value back.',
+      );
     }
   } finally {
     await surface.close();

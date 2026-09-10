@@ -1,0 +1,58 @@
+{
+  "kind": "escalated",
+  "reason": "error",
+  "atStepId": "step.submit-the-login-form",
+  "intent": "submit the login form",
+  "expected": "url matching //parabank/overview\\.htm/ and the text \"Accounts Overview\" on the page",
+  "observed": "\"submit the login form\" did not reach its checkpoint: all(...) failed: url \"https://parabank.parasoft.com/parabank/login.htm;jsessionid=8372CFB35596538D2D79CFE0862637CB\" does not match //parabank/overview\\.htm/",
+  "url": "https://parabank.parasoft.com/parabank/login.htm;jsessionid=8372CFB35596538D2D79CFE0862637CB",
+  "errorClass": "CHECKPOINT_FAILED",
+  "error": {
+    "class": "CHECKPOINT_FAILED",
+    "context": {
+      "stepId": "step.submit-the-login-form",
+      "url": "https://parabank.parasoft.com/parabank/login.htm;jsessionid=8372CFB35596538D2D79CFE0862637CB",
+      "expected": "url matching //parabank/overview\\.htm/ and the text \"Accounts Overview\" on the page"
+    },
+    "name": "ReplayError[CHECKPOINT_FAILED]"
+  },
+  "runId": "124db8ff-b8d2-4dbf-94ec-57ca9192af01",
+  "capabilityId": "parabank.open-savings-account",
+  "capabilityVersion": "1.0.0",
+  "steps": [
+    {
+      "id": "step.enter-the-online-banking-username",
+      "index": 0,
+      "intent": "enter the online banking username",
+      "strategy": "label=\"username\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 363
+    },
+    {
+      "id": "step.enter-the-online-banking-password",
+      "index": 1,
+      "intent": "enter the online banking password",
+      "strategy": "label=\"password\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 301
+    },
+    {
+      "id": "step.submit-the-login-form",
+      "index": 2,
+      "intent": "submit the login form",
+      "strategy": "role=button name=\"Log In\"",
+      "degraded": false,
+      "status": "failed",
+      "attempts": 1,
+      "durationMs": 15426,
+      "errorClass": "CHECKPOINT_FAILED",
+      "detail": "\"submit the login form\" did not reach its checkpoint: all(...) failed: url \"https://parabank.parasoft.com/parabank/login.htm;jsessionid=8372CFB35596538D2D79CFE0862637CB\" does not match //parabank/overview\\.htm/"
+    }
+  ],
+  "outputs": {},
+  "durationMs": 16098
+}

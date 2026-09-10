@@ -1,0 +1,49 @@
+{
+  "kind": "business_outcome",
+  "outcome": {
+    "name": "LOGIN_REJECTED",
+    "description": "ParaBank did not accept the credentials. It reports this with a generic internal-error page on /parabank/login.htm rather than a specific message, which is why the detector matches that wording.",
+    "terminal": true,
+    "detail": "all(url \"https://parabank.parasoft.com/parabank/login.htm;jsessionid=7FBA733E5E81F3C9FB63EDD863782BB7\" matches //parabank/(index|login)\\.htm/; text \"An internal error has occurred\" present)",
+    "data": {}
+  },
+  "atStepId": "step.submit-the-login-form",
+  "runId": "9367801d-6633-474d-a091-e04364326751",
+  "capabilityId": "parabank.open-savings-account",
+  "capabilityVersion": "1.0.0",
+  "steps": [
+    {
+      "id": "step.enter-the-online-banking-username",
+      "index": 0,
+      "intent": "enter the online banking username",
+      "strategy": "label=\"username\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 345
+    },
+    {
+      "id": "step.enter-the-online-banking-password",
+      "index": 1,
+      "intent": "enter the online banking password",
+      "strategy": "label=\"password\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 295
+    },
+    {
+      "id": "step.submit-the-login-form",
+      "index": 2,
+      "intent": "submit the login form",
+      "strategy": "role=button name=\"Log In\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 0,
+      "detail": "outcome LOGIN_REJECTED"
+    }
+  ],
+  "outputs": {},
+  "durationMs": 1401
+}

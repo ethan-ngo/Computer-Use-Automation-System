@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0",
-  "id": "parabank.open-parabank-savings-account",
+  "id": "parabank.open-savings-account",
   "version": "1.0.0",
-  "name": "Open ParaBank SAVINGS Account",
-  "description": "Logs into ParaBank online banking with vault credentials (PARABANK_USERNAME / PARABANK_PASSWORD), opens a new SAVINGS account funded by the customer's default existing account (the minimum opening deposit is transferred from it), and returns `newAccountNumber` from the \"Account Opened!\" confirmation page. Because opening an account and moving the opening deposit cannot be undone, the submit step is marked irreversible and requires human approval on each replay. Business outcomes: LOGIN_REJECTED (credentials not verified) and ACCOUNT_NOT_OPENED (form re-shown with no confirmation, e.g. minimum deposit not covered).",
+  "name": "Open ParaBank Savings Account",
+  "description": "Logs into ParaBank with vaulted credentials (PARABANK_USERNAME / PARABANK_PASSWORD), opens a new SAVINGS account funded from the funding account the Open New Account form pre-selects by default, and returns the new account number as `newAccountNumber`. Submitting the application is irreversible and requires human approval on each replay. Business outcomes: LOGIN_REJECTED (credentials not verified) and ACCOUNT_OPEN_FAILED (confirmation not shown, e.g. minimum $100 opening deposit cannot be met or the request errored).",
   "target": {
     "app": "parabank",
     "surfaceKind": "legacy-web",
@@ -13,7 +13,7 @@
   "outputs": {
     "newAccountNumber": {
       "type": "string",
-      "description": "The account number of the newly opened SAVINGS account."
+      "description": "The account number of the newly opened SAVINGS account, shown on the confirmation page."
     }
   },
   "steps": [
@@ -133,9 +133,9 @@
       "timeoutMs": 15000
     },
     {
-      "id": "step.go-to-the-open-new-account-page",
+      "id": "step.go-to-the-open-new-account-form",
       "index": 3,
-      "intent": "go to the Open New Account page",
+      "intent": "go to the Open New Account form",
       "action": {
         "type": "click"
       },
@@ -160,9 +160,22 @@
             "selector": "div#leftPanel > ul > li:nth-of-type(1) > a"
           }
         ],
-        "description": "go to the Open New Account page — link \"Open New Account\"",
-        "rationale": "Primary is role, verified unique against the 28 elements observed on this page. 3 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "description": "go to the Open New Account form — link \"Open New Account\"",
+        "rationale": "Primary is role, verified unique against the 38 elements observed on this page. 3 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
         "confidence": 1
+      },
+      "checkpoint": {
+        "kind": "all",
+        "of": [
+          {
+            "kind": "urlMatches",
+            "pattern": "/parabank/openaccount\\.htm"
+          },
+          {
+            "kind": "textPresent",
+            "text": "What type of Account would you like to open?"
+          }
+        ]
       },
       "extract": [],
       "onError": [],
@@ -208,7 +221,7 @@
           },
           {
             "kind": "textPresent",
-            "text": "A minimum of $90.00 must be deposited"
+            "text": "SAVINGS"
           }
         ]
       },
@@ -218,9 +231,9 @@
       "timeoutMs": 15000
     },
     {
-      "id": "step.submit-the-request-to-open-a-new-savings-account",
+      "id": "step.submit-the-application-to-open-a-new-savings-acc",
       "index": 5,
-      "intent": "submit the request to open a new SAVINGS account (transfers the minimum deposit from the existing account)",
+      "intent": "submit the application to open a new SAVINGS account funded from the default account",
       "action": {
         "type": "click"
       },
@@ -236,7 +249,7 @@
             "selector": "div#openAccountForm > form > div > input"
           }
         ],
-        "description": "submit the request to open a new SAVINGS account (transfers the minimum deposit from the existing account) — button \"Open New Account\"",
+        "description": "submit the application to open a new SAVINGS account funded from the default account — button \"Open New Account\"",
         "rationale": "Primary is role, verified unique against the 30 elements observed on this page. 1 fallback recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
         "confidence": 0.95
       },
@@ -263,7 +276,7 @@
                 "selector": "a#newAccountId"
               }
             ],
-            "description": "The account number of the newly opened SAVINGS account. — link \"21558\"",
+            "description": "The account number of the newly opened SAVINGS account, shown on the confirmation page. — link \"Your new account number\"",
             "rationale": "Primary is label, verified unique against the 28 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
             "confidence": 0.«redacted»
           },
@@ -279,27 +292,40 @@
   "outcomes": [
     {
       "name": "LOGIN_REJECTED",
-      "description": "The supplied username/password were not accepted, so no account can be opened.",
+      "description": "The supplied username/password was not accepted by ParaBank; no account can be opened.",
       "detect": {
-        "kind": "textPresent",
-        "text": "The username and password could not be verified."
+        "kind": "all",
+        "of": [
+          {
+            "kind": "urlMatches",
+            "pattern": "/parabank/(index|login)\\.htm"
+          },
+          {
+            "kind": "textPresent",
+            "text": "The username and password could not be verified."
+          }
+        ]
       },
       "terminal": true,
       "extract": []
     },
     {
-      "name": "ACCOUNT_NOT_OPENED",
-      "description": "The open-account request was submitted but the bank did not create an account (e.g. the funding account cannot cover the minimum opening deposit); the form is still shown and no confirmation number is issued.",
+      "name": "ACCOUNT_OPEN_FAILED",
+      "description": "ParaBank could not open the new savings account (e.g. the pre-selected funding account cannot cover the $100.00 minimum opening deposit, or the request errored). No account number is returned.",
       "detect": {
         "kind": "all",
         "of": [
           {
+            "kind": "urlMatches",
+            "pattern": "/parabank/openaccount\\.htm"
+          },
+          {
             "kind": "textPresent",
-            "text": "What type of Account would you like to open?"
+            "text": "error"
           },
           {
             "kind": "textAbsent",
-            "text": "Congratulations, your account is now open."
+            "text": "Your new account number"
           }
         ]
       },
@@ -319,10 +345,10 @@
     ]
   },
   "provenance": {
-    "discoveredAt": "2026-09-10T22:28:39.411Z",
+    "discoveredAt": "2026-09-10T23:01:16.212Z",
     "model": "claude-opus-5",
-    "runId": "3d0e851e-e337-4659-8448-d1f1a2eb228d",
-    "evidenceRef": "evidence/runs/3d0e851e-e337-4659-8448-d1f1a2eb228d",
+    "runId": "b459913e-c2bd-4656-a026-c99bdf1f6332",
+    "evidenceRef": "evidence/runs/b459913e-c2bd-4656-a026-c99bdf1f6332",
     "humanEdits": []
   }
 }

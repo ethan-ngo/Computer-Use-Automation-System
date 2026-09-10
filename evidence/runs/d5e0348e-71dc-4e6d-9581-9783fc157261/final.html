@@ -53,7 +53,7 @@
 							
 
 
-<p class="smallText"><b>Welcome</b> Chandana Sharath</p>
+<p class="smallText"><b>Welcome</b> John Smith</p>
 
 <h2>Account Services</h2>
 
@@ -78,7 +78,7 @@
 
 
 <div>
-  <div id="openAccountForm" style="display: none;">
+  <div id="openAccountForm">
     <h1 class="title">Open New Account</h1>
     <form>
       <p><b>What type of Account would you like to open?</b></p>
@@ -91,17 +91,17 @@
       </select>
       <br><br>
       
-      <p><b>A minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.</b></p>
-      <select id="fromAccountId" class="input"><option value="21114">21114</option></select>
+      <p><b>A minimum of $100.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.</b></p>
+      <select id="fromAccountId" class="input"><option value="12345">12345</option><option value="12456">12456</option><option value="12567">12567</option><option value="12678">12678</option><option value="12789">12789</option><option value="12900">12900</option><option value="13011">13011</option><option value="13122">13122</option><option value="13233">13233</option><option value="13344">13344</option><option value="54321">54321</option></select>
       <br><br>
       <div><input type="button" class="button" value="Open New Account" style=""></div>
     </form>
   </div>
 
-  <div id="openAccountResult" style="">
+  <div id="openAccountResult" style="display:none">
     <h1 class="title">Account Opened!</h1>
     <p>Congratulations, your account is now open.</p>
-    <p><b>Your new account number:</b> <a id="newAccountId" href="activity.htm?id=21225">21225</a></p>
+    <p><b>Your new account number:</b> <a id="newAccountId" href=""></a></p>
   </div>
 
   <div id="openAccountError" style="display:none">
@@ -140,7 +140,7 @@
 		}
 		var getAccounts = function() {
 			$.ajax({
-				url: "services_proxy/bank/customers/18317/accounts",
+				url: "services_proxy/bank/customers/12212/accounts",
 				dataType: "json",
 				success: function(data) {
 					accounts = data;
@@ -171,7 +171,7 @@
 		});
 		types.selectedOption = $('#type').val();
 		var submit = function(error) {
-			var url = "services_proxy/bank/createAccount?customerId=18317&newAccountType="+ types.selectedOption + "&fromAccountId=" + accounts.selectedOption.id;
+			var url = "services_proxy/bank/createAccount?customerId=12212&newAccountType="+ types.selectedOption + "&fromAccountId=" + accounts.selectedOption.id;
 			$.ajax({
 				type: 'POST',
           	  	contentType: 'application/json',

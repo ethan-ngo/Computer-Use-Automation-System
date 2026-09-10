@@ -1,8 +1,8 @@
 {
-  "runId": "54f6725b-4c80-484e-9b4a-02e170e8aed3",
-  "goal": "log in, open a new SAVINGS account, and read back the new account number shown on the confirmation",
+  "runId": "b459913e-c2bd-4656-a026-c99bdf1f6332",
+  "goal": "log in, open a new SAVINGS account funded from whichever existing account the form pre-selects by default, and read back the new account number shown on the confirmation",
   "model": "claude-opus-5",
-  "startedAt": "2026-09-10T22:25:45.504Z",
+  "startedAt": "2026-09-10T23:01:16.212Z",
   "app": "parabank",
   "baseUrl": "https://parabank.parasoft.com",
   "entryPoint": "/parabank/index.htm",
@@ -13,7 +13,7 @@
       "tool": "fill",
       "targetRef": "e10",
       "value": {
-        "secretRef": "«redacted»"
+        "secretRef": "PARABANK_USERNAME"
       },
       "before": {
         "url": "https://parabank.parasoft.com/parabank/index.htm",
@@ -743,7 +743,7 @@
       "tool": "fill",
       "targetRef": "e11",
       "value": {
-        "secretRef": "«redacted»"
+        "secretRef": "PARABANK_PASSWORD"
       },
       "before": {
         "url": "https://parabank.parasoft.com/parabank/index.htm",
@@ -1835,7 +1835,7 @@
       "after": {
         "url": "https://parabank.parasoft.com/parabank/overview.htm",
         "title": "ParaBank | Accounts Overview",
-        "ariaHash": "6a39a4a758ce073d875c715418c90f7c8cf05666",
+        "ariaHash": "dbaaa1ab5546884a85efe5d0946fb7583da06bf8",
         "nodes": [
           {
             "ref": "e1",
@@ -1922,7 +1922,7 @@
             "role": "heading",
             "name": "Account Services",
             "enabled": true,
-            "labelHint": "Welcome Chandana Sharath",
+            "labelHint": "Welcome John Smith",
             "cssPath": "div#leftPanel > h2",
             "siblingIndex": 1,
             "framePath": []
@@ -2012,7 +2012,7 @@
             "role": "heading",
             "name": "Accounts Overview",
             "enabled": true,
-            "labelHint": "Accounts Overview Account Balance* Available Amount 21114$425.50$425.5021225$90.00$90.00Total$515.50 *Balance includes d",
+            "labelHint": "Accounts Overview Account Balance* Available Amount 12345-$2300.00$0.0012456$10.45$10.4512567$100.00$100.0012678-$100.00",
             "cssPath": "div#showOverview > h1",
             "siblingIndex": 0,
             "framePath": []
@@ -2020,9 +2020,9 @@
           {
             "ref": "e19",
             "role": "link",
-            "name": "21114",
+            "name": "12345",
             "enabled": true,
-            "labelHint": "21114",
+            "labelHint": "12345",
             "cssPath": "table#accountTable > tbody > tr:nth-of-type(1) > td:nth-of-type(1) > a",
             "siblingIndex": 0,
             "framePath": []
@@ -2030,15 +2030,105 @@
           {
             "ref": "e20",
             "role": "link",
-            "name": "21225",
+            "name": "12456",
             "enabled": true,
-            "labelHint": "21225",
+            "labelHint": "12456",
             "cssPath": "table#accountTable > tbody > tr:nth-of-type(2) > td:nth-of-type(1) > a",
             "siblingIndex": 0,
             "framePath": []
           },
           {
             "ref": "e21",
+            "role": "link",
+            "name": "12567",
+            "enabled": true,
+            "labelHint": "12567",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(3) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "12678",
+            "enabled": true,
+            "labelHint": "12678",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(4) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "12789",
+            "enabled": true,
+            "labelHint": "12789",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(5) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "12900",
+            "enabled": true,
+            "labelHint": "12900",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(6) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "13011",
+            "enabled": true,
+            "labelHint": "13011",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(7) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "13122",
+            "enabled": true,
+            "labelHint": "13122",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(8) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "13233",
+            "enabled": true,
+            "labelHint": "13233",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(9) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "13344",
+            "enabled": true,
+            "labelHint": "13344",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(10) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "54321",
+            "enabled": true,
+            "labelHint": "54321",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(11) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
             "role": "link",
             "name": "Home",
             "enabled": true,
@@ -2048,7 +2138,7 @@
             "framePath": []
           },
           {
-            "ref": "e22",
+            "ref": "e31",
             "role": "link",
             "name": "About Us",
             "enabled": true,
@@ -2058,7 +2148,7 @@
             "framePath": []
           },
           {
-            "ref": "e23",
+            "ref": "e32",
             "role": "link",
             "name": "Services",
             "enabled": true,
@@ -2068,7 +2158,7 @@
             "framePath": []
           },
           {
-            "ref": "e24",
+            "ref": "e33",
             "role": "link",
             "name": "Products",
             "enabled": true,
@@ -2078,7 +2168,7 @@
             "framePath": []
           },
           {
-            "ref": "e25",
+            "ref": "e34",
             "role": "link",
             "name": "Locations",
             "enabled": true,
@@ -2088,7 +2178,7 @@
             "framePath": []
           },
           {
-            "ref": "e26",
+            "ref": "e35",
             "role": "link",
             "name": "Forum",
             "enabled": true,
@@ -2098,7 +2188,7 @@
             "framePath": []
           },
           {
-            "ref": "e27",
+            "ref": "e36",
             "role": "link",
             "name": "Site Map",
             "enabled": true,
@@ -2108,7 +2198,7 @@
             "framePath": []
           },
           {
-            "ref": "e28",
+            "ref": "e37",
             "role": "link",
             "name": "Contact Us",
             "enabled": true,
@@ -2118,7 +2208,7 @@
             "framePath": []
           },
           {
-            "ref": "e29",
+            "ref": "e38",
             "role": "link",
             "name": "www.parasoft.com",
             "enabled": true,
@@ -2128,7 +2218,7 @@
             "framePath": []
           }
         ],
-        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome Chandana Sharath\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nAccounts Overview\nAccount\tBalance*\tAvailable Amount\n21114\t$425.50\t$425.50\n21225\t$90.00\t$90.00\nTotal\t$515.50\t \n*Balance includes deposits that may be subject to holds\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome John Smith\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nAccounts Overview\nAccount\tBalance*\tAvailable Amount\n12345\t-$2300.00\t$0.00\n12456\t$10.45\t$10.45\n12567\t$100.00\t$100.00\n12678\t-$100.00\t$0.00\n12789\t$100.00\t$100.00\n12900\t$0.00\t$0.00\n13011\t$100.00\t$100.00\n13122\t$1100.00\t$1100.00\n13233\t$100.00\t$100.00\n13344\t$1231.10\t$1231.10\n54321\t$1351.12\t$1351.12\nTotal\t$1692.67\t \n*Balance includes deposits that may be subject to holds\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
       },
       "extracts": [],
       "checkpoint": {
@@ -2138,13 +2228,13 @@
     },
     {
       "seq": 4,
-      "intent": "go to the Open New Account page",
+      "intent": "go to the Open New Account form",
       "tool": "click",
       "targetRef": "e10",
       "before": {
         "url": "https://parabank.parasoft.com/parabank/overview.htm",
         "title": "ParaBank | Accounts Overview",
-        "ariaHash": "6a39a4a758ce073d875c715418c90f7c8cf05666",
+        "ariaHash": "dbaaa1ab5546884a85efe5d0946fb7583da06bf8",
         "nodes": [
           {
             "ref": "e1",
@@ -2231,7 +2321,7 @@
             "role": "heading",
             "name": "Account Services",
             "enabled": true,
-            "labelHint": "Welcome Chandana Sharath",
+            "labelHint": "Welcome John Smith",
             "cssPath": "div#leftPanel > h2",
             "siblingIndex": 1,
             "framePath": []
@@ -2321,7 +2411,7 @@
             "role": "heading",
             "name": "Accounts Overview",
             "enabled": true,
-            "labelHint": "Accounts Overview Account Balance* Available Amount 21114$425.50$425.5021225$90.00$90.00Total$515.50 *Balance includes d",
+            "labelHint": "Accounts Overview Account Balance* Available Amount 12345-$2300.00$0.0012456$10.45$10.4512567$100.00$100.0012678-$100.00",
             "cssPath": "div#showOverview > h1",
             "siblingIndex": 0,
             "framePath": []
@@ -2329,9 +2419,9 @@
           {
             "ref": "e19",
             "role": "link",
-            "name": "21114",
+            "name": "12345",
             "enabled": true,
-            "labelHint": "21114",
+            "labelHint": "12345",
             "cssPath": "table#accountTable > tbody > tr:nth-of-type(1) > td:nth-of-type(1) > a",
             "siblingIndex": 0,
             "framePath": []
@@ -2339,15 +2429,105 @@
           {
             "ref": "e20",
             "role": "link",
-            "name": "21225",
+            "name": "12456",
             "enabled": true,
-            "labelHint": "21225",
+            "labelHint": "12456",
             "cssPath": "table#accountTable > tbody > tr:nth-of-type(2) > td:nth-of-type(1) > a",
             "siblingIndex": 0,
             "framePath": []
           },
           {
             "ref": "e21",
+            "role": "link",
+            "name": "12567",
+            "enabled": true,
+            "labelHint": "12567",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(3) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "12678",
+            "enabled": true,
+            "labelHint": "12678",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(4) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "12789",
+            "enabled": true,
+            "labelHint": "12789",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(5) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "12900",
+            "enabled": true,
+            "labelHint": "12900",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(6) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "13011",
+            "enabled": true,
+            "labelHint": "13011",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(7) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "13122",
+            "enabled": true,
+            "labelHint": "13122",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(8) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "13233",
+            "enabled": true,
+            "labelHint": "13233",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(9) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "13344",
+            "enabled": true,
+            "labelHint": "13344",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(10) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "54321",
+            "enabled": true,
+            "labelHint": "54321",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(11) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
             "role": "link",
             "name": "Home",
             "enabled": true,
@@ -2357,7 +2537,7 @@
             "framePath": []
           },
           {
-            "ref": "e22",
+            "ref": "e31",
             "role": "link",
             "name": "About Us",
             "enabled": true,
@@ -2367,7 +2547,7 @@
             "framePath": []
           },
           {
-            "ref": "e23",
+            "ref": "e32",
             "role": "link",
             "name": "Services",
             "enabled": true,
@@ -2377,7 +2557,7 @@
             "framePath": []
           },
           {
-            "ref": "e24",
+            "ref": "e33",
             "role": "link",
             "name": "Products",
             "enabled": true,
@@ -2387,7 +2567,7 @@
             "framePath": []
           },
           {
-            "ref": "e25",
+            "ref": "e34",
             "role": "link",
             "name": "Locations",
             "enabled": true,
@@ -2397,7 +2577,7 @@
             "framePath": []
           },
           {
-            "ref": "e26",
+            "ref": "e35",
             "role": "link",
             "name": "Forum",
             "enabled": true,
@@ -2407,7 +2587,7 @@
             "framePath": []
           },
           {
-            "ref": "e27",
+            "ref": "e36",
             "role": "link",
             "name": "Site Map",
             "enabled": true,
@@ -2417,7 +2597,7 @@
             "framePath": []
           },
           {
-            "ref": "e28",
+            "ref": "e37",
             "role": "link",
             "name": "Contact Us",
             "enabled": true,
@@ -2427,7 +2607,7 @@
             "framePath": []
           },
           {
-            "ref": "e29",
+            "ref": "e38",
             "role": "link",
             "name": "www.parasoft.com",
             "enabled": true,
@@ -2437,12 +2617,12 @@
             "framePath": []
           }
         ],
-        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome Chandana Sharath\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nAccounts Overview\nAccount\tBalance*\tAvailable Amount\n21114\t$425.50\t$425.50\n21225\t$90.00\t$90.00\nTotal\t$515.50\t \n*Balance includes deposits that may be subject to holds\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome John Smith\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nAccounts Overview\nAccount\tBalance*\tAvailable Amount\n12345\t-$2300.00\t$0.00\n12456\t$10.45\t$10.45\n12567\t$100.00\t$100.00\n12678\t-$100.00\t$0.00\n12789\t$100.00\t$100.00\n12900\t$0.00\t$0.00\n13011\t$100.00\t$100.00\n13122\t$1100.00\t$1100.00\n13233\t$100.00\t$100.00\n13344\t$1231.10\t$1231.10\n54321\t$1351.12\t$1351.12\nTotal\t$1692.67\t \n*Balance includes deposits that may be subject to holds\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
       },
       "after": {
         "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
         "title": "ParaBank | Open Account",
-        "ariaHash": "1c0ff17292fd698cbe04c5039dbb7d04549571b5",
+        "ariaHash": "b5f3e6dce613fa277dd6770abeb1e00b9cb901fb",
         "nodes": [
           {
             "ref": "e1",
@@ -2529,7 +2709,7 @@
             "role": "heading",
             "name": "Account Services",
             "enabled": true,
-            "labelHint": "Welcome Chandana Sharath",
+            "labelHint": "Welcome John Smith",
             "cssPath": "div#leftPanel > h2",
             "siblingIndex": 1,
             "framePath": []
@@ -2619,7 +2799,7 @@
             "role": "heading",
             "name": "Open New Account",
             "enabled": true,
-            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $90.00 must be deposited int",
+            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $100.00 must be deposited in",
             "cssPath": "div#openAccountForm > h1",
             "siblingIndex": 0,
             "framePath": []
@@ -2639,9 +2819,9 @@
             "ref": "e20",
             "role": "combobox",
             "name": "",
-            "value": "21114",
+            "value": "12345",
             "enabled": true,
-            "labelHint": "A minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
+            "labelHint": "A minimum of $100.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
             "cssPath": "select#fromAccountId",
             "siblingIndex": 5,
             "framePath": []
@@ -2747,7 +2927,7 @@
             "framePath": []
           }
         ],
-        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome Chandana Sharath\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n21114\n21225\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome John Smith\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $100.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n12345\n12456\n12567\n12678\n12789\n12900\n13011\n13122\n13233\n13344\n54321\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
       },
       "extracts": [],
       "checkpoint": {
@@ -2766,7 +2946,7 @@
       "before": {
         "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
         "title": "ParaBank | Open Account",
-        "ariaHash": "1c0ff17292fd698cbe04c5039dbb7d04549571b5",
+        "ariaHash": "b5f3e6dce613fa277dd6770abeb1e00b9cb901fb",
         "nodes": [
           {
             "ref": "e1",
@@ -2853,7 +3033,7 @@
             "role": "heading",
             "name": "Account Services",
             "enabled": true,
-            "labelHint": "Welcome Chandana Sharath",
+            "labelHint": "Welcome John Smith",
             "cssPath": "div#leftPanel > h2",
             "siblingIndex": 1,
             "framePath": []
@@ -2943,7 +3123,7 @@
             "role": "heading",
             "name": "Open New Account",
             "enabled": true,
-            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $90.00 must be deposited int",
+            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $100.00 must be deposited in",
             "cssPath": "div#openAccountForm > h1",
             "siblingIndex": 0,
             "framePath": []
@@ -2963,9 +3143,9 @@
             "ref": "e20",
             "role": "combobox",
             "name": "",
-            "value": "21114",
+            "value": "12345",
             "enabled": true,
-            "labelHint": "A minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
+            "labelHint": "A minimum of $100.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
             "cssPath": "select#fromAccountId",
             "siblingIndex": 5,
             "framePath": []
@@ -3071,12 +3251,12 @@
             "framePath": []
           }
         ],
-        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome Chandana Sharath\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n21114\n21225\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome John Smith\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $100.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n12345\n12456\n12567\n12678\n12789\n12900\n13011\n13122\n13233\n13344\n54321\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
       },
       "after": {
         "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
         "title": "ParaBank | Open Account",
-        "ariaHash": "1c0ff17292fd698cbe04c5039dbb7d04549571b5",
+        "ariaHash": "b5f3e6dce613fa277dd6770abeb1e00b9cb901fb",
         "nodes": [
           {
             "ref": "e1",
@@ -3163,7 +3343,7 @@
             "role": "heading",
             "name": "Account Services",
             "enabled": true,
-            "labelHint": "Welcome Chandana Sharath",
+            "labelHint": "Welcome John Smith",
             "cssPath": "div#leftPanel > h2",
             "siblingIndex": 1,
             "framePath": []
@@ -3253,7 +3433,7 @@
             "role": "heading",
             "name": "Open New Account",
             "enabled": true,
-            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $90.00 must be deposited int",
+            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $100.00 must be deposited in",
             "cssPath": "div#openAccountForm > h1",
             "siblingIndex": 0,
             "framePath": []
@@ -3273,9 +3453,9 @@
             "ref": "e20",
             "role": "combobox",
             "name": "",
-            "value": "21114",
+            "value": "12345",
             "enabled": true,
-            "labelHint": "A minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
+            "labelHint": "A minimum of $100.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
             "cssPath": "select#fromAccountId",
             "siblingIndex": 5,
             "framePath": []
@@ -3381,19 +3561,23 @@
             "framePath": []
           }
         ],
-        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome Chandana Sharath\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n21114\n21225\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome John Smith\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $100.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n12345\n12456\n12567\n12678\n12789\n12900\n13011\n13122\n13233\n13344\n54321\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
       },
-      "extracts": []
+      "extracts": [],
+      "checkpoint": {
+        "textPresent": "SAVINGS",
+        "urlMatches": "/parabank/openaccount\\.htm"
+      }
     },
     {
       "seq": 6,
-      "intent": "submit the application to open a new SAVINGS account (opens a real account and transfers the minimum deposit)",
+      "intent": "submit the application to open a new SAVINGS account funded from the default account",
       "tool": "click",
       "targetRef": "e21",
       "before": {
         "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
         "title": "ParaBank | Open Account",
-        "ariaHash": "1c0ff17292fd698cbe04c5039dbb7d04549571b5",
+        "ariaHash": "b5f3e6dce613fa277dd6770abeb1e00b9cb901fb",
         "nodes": [
           {
             "ref": "e1",
@@ -3480,7 +3664,7 @@
             "role": "heading",
             "name": "Account Services",
             "enabled": true,
-            "labelHint": "Welcome Chandana Sharath",
+            "labelHint": "Welcome John Smith",
             "cssPath": "div#leftPanel > h2",
             "siblingIndex": 1,
             "framePath": []
@@ -3570,7 +3754,7 @@
             "role": "heading",
             "name": "Open New Account",
             "enabled": true,
-            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $90.00 must be deposited int",
+            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $100.00 must be deposited in",
             "cssPath": "div#openAccountForm > h1",
             "siblingIndex": 0,
             "framePath": []
@@ -3590,9 +3774,9 @@
             "ref": "e20",
             "role": "combobox",
             "name": "",
-            "value": "21114",
+            "value": "12345",
             "enabled": true,
-            "labelHint": "A minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
+            "labelHint": "A minimum of $100.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
             "cssPath": "select#fromAccountId",
             "siblingIndex": 5,
             "framePath": []
@@ -3698,12 +3882,12 @@
             "framePath": []
           }
         ],
-        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome Chandana Sharath\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n21114\n21225\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome John Smith\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $100.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n12345\n12456\n12567\n12678\n12789\n12900\n13011\n13122\n13233\n13344\n54321\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
       },
       "after": {
         "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
         "title": "ParaBank | Open Account",
-        "ariaHash": "50f14717b43f1020daaa0cf4e1ce22e481668929",
+        "ariaHash": "0a01a32610537d4951ba33e47849e0fb7f2120a2",
         "nodes": [
           {
             "ref": "e1",
@@ -3790,7 +3974,7 @@
             "role": "heading",
             "name": "Account Services",
             "enabled": true,
-            "labelHint": "Welcome Chandana Sharath",
+            "labelHint": "Welcome John Smith",
             "cssPath": "div#leftPanel > h2",
             "siblingIndex": 1,
             "framePath": []
@@ -3880,7 +4064,7 @@
             "role": "heading",
             "name": "Account Opened!",
             "enabled": true,
-            "labelHint": "Account Opened! Congratulations, your account is now open. Your new account number: 21336",
+            "labelHint": "Account Opened! Congratulations, your account is now open. Your new account number: 13566",
             "cssPath": "div#openAccountResult > h1",
             "siblingIndex": 0,
             "framePath": []
@@ -3888,7 +4072,7 @@
           {
             "ref": "e19",
             "role": "link",
-            "name": "21336",
+            "name": "13566",
             "enabled": true,
             "labelHint": "Your new account number",
             "cssPath": "a#newAccountId",
@@ -3986,14 +4170,14 @@
             "framePath": []
           }
         ],
-        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome Chandana Sharath\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nAccount Opened!\n\nCongratulations, your account is now open.\n\nYour new account number: 21336\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome John Smith\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nAccount Opened!\n\nCongratulations, your account is now open.\n\nYour new account number: 13566\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
       },
       "extracts": [
         {
           "name": "newAccountNumber",
           "ref": "e19",
           "as": "string",
-          "description": "The account number of the newly opened SAVINGS account, from the confirmation page.",
+          "description": "The account number of the newly opened SAVINGS account, shown on the confirmation page.",
           "pattern": "(\\d{3,})"
         }
       ],
@@ -4006,10 +4190,20 @@
   "outcomes": [
     {
       "name": "LOGIN_REJECTED",
-      "description": "The supplied username/password were not accepted by ParaBank; no account can be opened.",
+      "description": "The supplied username/password was not accepted by ParaBank; no account can be opened.",
       "detect": {
         "textPresent": "The username and password could not be verified.",
-        "urlMatches": "/parabank/login\\.htm"
+        "urlMatches": "/parabank/(index|login)\\.htm"
+      },
+      "terminal": true
+    },
+    {
+      "name": "ACCOUNT_OPEN_FAILED",
+      "description": "ParaBank could not open the new savings account (e.g. the pre-selected funding account cannot cover the $100.00 minimum opening deposit, or the request errored). No account number is returned.",
+      "detect": {
+        "textPresent": "error",
+        "textAbsent": "Your new account number",
+        "urlMatches": "/parabank/openaccount\\.htm"
       },
       "terminal": true
     }
@@ -4017,9 +4211,9 @@
   "escalations": [],
   "stoppedBecause": "finished",
   "finish": {
-    "name": "ParaBank: Open New Savings Account",
-    "description": "Logs into ParaBank online banking with vault credentials (PARABANK_USERNAME / PARABANK_PASSWORD), opens a new SAVINGS account funded from the customer's first existing account (the pre-selected default, since the funding list is customer-specific), and returns the new account number from the \"Account Opened!\" confirmation page as output `newAccountNumber`. The account-opening submission is marked irreversible and requires human approval on every replay. Business outcomes: LOGIN_REJECTED (credentials not verified — terminal, no account opened).",
-    "summary": "Logged in via secret references, navigated to Open New Account, selected SAVINGS, left the default funding account (list varies per customer), and submitted the application (marked irreversible). Confirmed \"Congratulations, your account is now open.\" and extracted the new account number (21336 in this run). Declared LOGIN_REJECTED as a terminal business outcome and checkpoints at each step. No suspicious or instruction-like content was present in page data."
+    "name": "Open ParaBank Savings Account",
+    "description": "Logs into ParaBank with vaulted credentials (PARABANK_USERNAME / PARABANK_PASSWORD), opens a new SAVINGS account funded from the funding account the Open New Account form pre-selects by default, and returns the new account number as `newAccountNumber`. Submitting the application is irreversible and requires human approval on each replay. Business outcomes: LOGIN_REJECTED (credentials not verified) and ACCOUNT_OPEN_FAILED (confirmation not shown, e.g. minimum $100 opening deposit cannot be met or the request errored).",
+    "summary": "Logged in as the vaulted user, navigated to Open New Account, selected account type SAVINGS, left the pre-selected funding account (12345) untouched, and submitted the application (marked irreversible). Confirmation page \"Account Opened!\" appeared and the new account number 13566 was declared as the output newAccountNumber. Checkpoints recorded at each step; LOGIN_REJECTED and ACCOUNT_OPEN_FAILED declared as business outcomes."
   },
-  "finishedAt": "2026-09-10T22:27:24.251Z"
+  "finishedAt": "2026-09-10T23:02:35.651Z"
 }
