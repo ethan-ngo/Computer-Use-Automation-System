@@ -3,9 +3,11 @@
 Execution tracker for `docs/PLAN.md`. Check items off as they complete.
 Resume rule: find the first unchecked box, do that.
 
-**State as of last session:** M0 + M1 complete — 29 tests green, typecheck clean.
-Next action is M2 (Surface + locator engine), which is the first step needing Chromium
-(`npx playwright install chromium`, still unapproved).
+**State as of last session:** M0-M3, M6 and M7 complete — 94 tests green, typecheck clean.
+Next action is M4 + M5 (discovery loop + recorder). Two things are still blocked and
+neither is on the critical path for more code: capturing fixtures needs Chromium
+(`npx playwright install chromium`, still unapproved) and the live discovery run needs
+`ANTHROPIC_API_KEY`.
 
 **Environment notes**
 - Node v23.7.0, npm 11.6.2, git 2.39.2 — all present.
@@ -41,33 +43,35 @@ Next action is M2 (Surface + locator engine), which is the first step needing Ch
 
 ## M2 — Surface + locator engine
 
-- [ ] `src/surface/types.ts` — `Observation`, `Action`, `ActionResult`, `Resolution`, `EvidenceBundle`, `SessionLease`
-- [ ] `src/surface/surface.ts` — the `Surface` interface (`observe`/`act`/`resolve`/`capture`/`lease`)
-- [ ] `src/surface/playwright-web.ts` — `ariaSnapshot()` + legacy enrichment pass deriving `labelHint` from preceding `<td>` / `<b>` / `name` attr (this *is* the legacy-surface handling)
-- [ ] Normalized node shape: `{ref,role,name,value,enabled,labelHint,cssPath,siblingIndex,framePath}`
-- [ ] `src/replay/locator.ts` — try primary then fallbacks in order; **require exactly one match**; `LOCATOR_AMBIGUOUS` on >1; record which strategy resolved
-- [ ] Tests: fallback ordering; ambiguity raises rather than picking first; resolved-strategy telemetry emitted
+- [x] `src/surface/types.ts` — `Observation`, `Action`, `ActionResult`, `Resolution`, `EvidenceBundle`, `SessionLease`
+- [x] `src/surface/surface.ts` — the `Surface` interface (`observe`/`act`/`resolve`/`capture`/`lease`)
+- [x] `src/surface/playwright-web.ts` — `ariaSnapshot()` + legacy enrichment pass deriving `labelHint` from preceding `<td>` / `<b>` / `name` attr (this *is* the legacy-surface handling)
+- [x] Normalized node shape: `{ref,role,name,value,enabled,labelHint,cssPath,siblingIndex,framePath}`
+- [x] `src/replay/locator.ts` — try primary then fallbacks in order; **require exactly one match**; `LOCATOR_AMBIGUOUS` on >1; record which strategy resolved
+- [x] Tests: fallback ordering; ambiguity raises rather than picking first; resolved-strategy telemetry emitted
 
 ## M3 + M6 — Replay engine, outcomes, error taxonomy
 
-- [ ] `src/replay/outcomes.ts` — outcome detectors compiled from `OutcomeSpec`
-- [ ] `src/replay/engine.ts` — per step: assert `waitFor` → resolve → policy check → act → **race checkpoint against all outcome detectors** → `extract`
-- [ ] `ReplayResult` union: `success` | `business_outcome` | `escalated` | `failed`
-- [ ] `ReplayError` classes: `LOCATOR_NOT_FOUND`, `LOCATOR_AMBIGUOUS`, `CHECKPOINT_FAILED`, `TIMEOUT`, `SESSION_EXPIRED`, `UNEXPECTED_DIALOG`, `POLICY_DENIED`, `NAVIGATION_BLOCKED`, `APP_ERROR`, `STRUCTURAL_DIVERGENCE`, `RESUME_STATE_UNRECOGNIZED`
-- [ ] Three-tier handling: recoverable (`onError` specs + bounded retry/backoff, re-login once on `SESSION_EXPIRED`) / business outcome / hard failure
-- [ ] Budgets: step budget, wall clock, retry caps
-- [ ] Capture `fixtures/parabank/*.html` while the live site is up
-- [ ] `src/cli/serve-fixtures.ts` — static server for offline replay
-- [ ] Tests: **outcome detectors take precedence over timeout** (the headline test); recovery spec fires; budget exhaustion terminates
+- [x] `src/replay/outcomes.ts` — outcome detectors compiled from `OutcomeSpec`
+- [x] `src/replay/engine.ts` — per step: assert `waitFor` → resolve → policy check → act → **race checkpoint against all outcome detectors** → `extract`
+- [x] `ReplayResult` union: `success` | `business_outcome` | `escalated` | `failed`
+- [x] `ReplayError` classes: `LOCATOR_NOT_FOUND`, `LOCATOR_AMBIGUOUS`, `CHECKPOINT_FAILED`, `TIMEOUT`, `SESSION_EXPIRED`, `UNEXPECTED_DIALOG`, `POLICY_DENIED`, `NAVIGATION_BLOCKED`, `APP_ERROR`, `STRUCTURAL_DIVERGENCE`, `RESUME_STATE_UNRECOGNIZED`
+- [x] Three-tier handling: recoverable (`onError` specs + bounded retry/backoff, re-login once on `SESSION_EXPIRED`) / business outcome / hard failure
+- [x] Budgets: step budget, wall clock, retry caps
+- [ ] Capture `fixtures/parabank/*.html` while the live site is up *(blocked on Chromium; `src/cli/capture-fixtures.ts` is written and its inertify pass is tested)*
+- [x] `src/cli/serve-fixtures.ts` — static server for offline replay
+- [x] `src/replay/extract.ts` — typed extraction; locale-aware money/date parsing through the tenant binding *(not in the original plan; the alternative was untyped scraping, which is how locale bugs go silent)*
+- [x] `src/evidence/types.ts` — `RunEvent` / `RunLogger`, so the engine emits evidence without touching a filesystem
+- [x] Tests: **outcome detectors take precedence over timeout** (the headline test, plus its contrast pair: the identical page escalates when the outcome is *not* declared); recovery spec fires; budget exhaustion terminates; approval gate blocks an irreversible action; resume never re-runs a human-completed step; fallback strategy recorded as degraded; secrets redacted out of outputs
 
 ## M7 — Policy
 
-- [ ] `policy.yaml` — allowed domains + route globs, allowed/denied action types, risk patterns, secret refs, redaction patterns
-- [ ] `src/policy/allowlist.ts` — **parsed-origin + path-glob**, never string prefix; scheme allowlist (`http`/`https` only)
-- [ ] `src/policy/risk.ts` — `safe` | `irreversible` classification; `requiresApproval` on irreversible
-- [ ] `src/policy/redact.ts` — redaction at every write boundary; screenshot `mask:` over credential fields
-- [ ] Wire enforcement **inside `Surface.act()`** — single chokepoint for both discovery and replay
-- [ ] Tests: denies off-origin (`parabank.parasoft.com.evil.tld`), denies non-http schemes, denies new-tab/download, secrets redacted in logs+artifacts, **act() throws when policy denies**
+- [x] `policy.yaml` — allowed domains + route globs, allowed/denied action types, risk patterns, secret refs, redaction patterns
+- [x] Parsed-origin + path-glob allowlist, never string prefix; scheme allowlist (`http`/`https` only) — landed in `src/policy/policy.ts` alongside risk classification rather than as a separate `allowlist.ts`; they are twenty lines each and share the policy file
+- [x] `safe` | `irreversible` classification and `requiresApproval` on irreversible — same module, `classifyRisk()`
+- [x] `src/policy/redact.ts` — redaction at every write boundary; screenshot `mask:` over credential fields
+- [x] Wire enforcement **inside `Surface.act()`** — single chokepoint for both discovery and replay
+- [x] Tests: denies off-origin (`parabank.parasoft.com.evil.tld`), denies non-http schemes, denies new-tab/download, secrets redacted in logs+artifacts, **act() throws when policy denies**
 
 ## M4 + M5 — Discovery loop + recorder
 
