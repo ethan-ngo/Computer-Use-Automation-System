@@ -16,8 +16,9 @@
  */
 
 import { classifyRisk, type Policy } from '../policy/policy.js';
+import { evaluate } from '../replay/assertions.js';
 import { matchStrategy } from '../replay/locator.js';
-import type { UiNode } from '../surface/types.js';
+import type { Observation, UiNode } from '../surface/types.js';
 import type {
   Assertion,
   CapabilityArtifact,
@@ -58,17 +59,30 @@ export class RecorderError extends Error {
 // Locator synthesis
 // ---------------------------------------------------------------------------
 
-/** Strategies in preference order. Robustness first, `css` only ever as a last resort. */
-function candidateStrategies(node: UiNode): Strategy[] {
+/**
+ * Strategies in preference order. Robustness first, `css` only ever as a last resort.
+ *
+ * `forExtraction` drops every strategy keyed on the node's own accessible name, and that
+ * distinction is not a nicety — it is the difference between a capability that works twice
+ * and one that works once.
+ *
+ * For an element we *act on*, the name is its stable identity: the button says "Log In"
+ * on every run. For an element we *extract from*, the name is the payload. The first live
+ * Opus run recorded the new account number's locator as `role=link name="21336"` — the
+ * number it had just created. On the next replay the account number is different, the
+ * locator matches nothing, and the capability fails at the only step that produced value.
+ * Where the value lives is described by the things around it, never by the value itself.
+ */
+function candidateStrategies(node: UiNode, forExtraction = false): Strategy[] {
   const out: Strategy[] = [];
-  if (node.name) out.push({ kind: 'role', role: node.role, name: node.name });
+  if (node.name && !forExtraction) out.push({ kind: 'role', role: node.role, name: node.name });
   if (node.testId) out.push({ kind: 'testId', id: node.testId });
   if (node.labelHint) out.push({ kind: 'label', text: node.labelHint });
   if (node.placeholder) out.push({ kind: 'placeholder', text: node.placeholder });
   // The legacy-surface strategy: role plus the caption a sighted user reads as the label,
   // which on a JSP table is an adjacent cell rather than a `<label for>`.
   if (node.labelHint) out.push({ kind: 'nearbyText', text: node.labelHint, role: node.role });
-  if (node.name) out.push({ kind: 'text', text: node.name });
+  if (node.name && !forExtraction) out.push({ kind: 'text', text: node.name });
   return out;
 }
 
@@ -83,8 +97,14 @@ const CONFIDENCE: Record<Strategy['kind'], number> = {
   nth: 0.25,
 };
 
-function describe(node: UiNode): string {
-  const label = node.name || node.labelHint || node.placeholder || node.cssPath;
+function describe(node: UiNode, forExtraction = false): string {
+  // For an extraction target the accessible name is this run's value, which in a
+  // description reads as though the locator were pinned to it. Lead with the surrounding
+  // caption instead, so a reviewer sees "link \"Your new account number\"" rather than
+  // "link \"21558\"" and is not misled about what the locator actually matches on.
+  const label = forExtraction
+    ? node.labelHint || node.placeholder || node.cssPath
+    : node.name || node.labelHint || node.placeholder || node.cssPath;
   return `${node.role} "${label}"`;
 }
 
@@ -99,10 +119,10 @@ function describe(node: UiNode): string {
 export function buildLocator(
   node: UiNode,
   nodes: UiNode[],
-  opts: { humanChose?: boolean; purpose?: string } = {},
+  opts: { humanChose?: boolean; purpose?: string; forExtraction?: boolean } = {},
 ): Locator {
   const verified: Strategy[] = [];
-  for (const strategy of candidateStrategies(node)) {
+  for (const strategy of candidateStrategies(node, opts.forExtraction)) {
     const matches = matchStrategy(nodes, strategy);
     if (matches && matches.length === 1 && matches[0]?.ref === node.ref) verified.push(strategy);
   }
@@ -129,7 +149,11 @@ export function buildLocator(
     verified.length === 0
       ? `No accessible handle on this element resolved uniquely, so only a CSS path could be ` +
         `recorded. This locator is brittle by construction and should be reviewed; a fallback ` +
-        `winning at replay time will be reported as drift.`
+        `winning at replay time will be reported as drift.` +
+        (opts.forExtraction
+          ? ` Strategies keyed on this element's own text were excluded: this is an ` +
+            `extraction target, so its text is the value that changes every run.`
+          : '')
       : `Primary is ${primary.kind}, verified unique against the ${nodes.length} elements ` +
         `observed on this page. ${fallbacks.length} fallback${fallbacks.length === 1 ? '' : 's'} ` +
         `recorded, ending in the CSS path. Role and accessible name are preferred because they ` +
@@ -139,7 +163,9 @@ export function buildLocator(
   return {
     primary,
     fallbacks,
-    description: opts.purpose ? `${opts.purpose} — ${describe(node)}` : describe(node),
+    description: opts.purpose
+      ? `${opts.purpose} — ${describe(node, opts.forExtraction)}`
+      : describe(node, opts.forExtraction),
     rationale,
     confidence,
   };
@@ -238,7 +264,12 @@ function extractSpec(declared: DeclaredExtract, after: ObservationSnapshot): Ext
   }
   return {
     name: declared.name,
-    from: buildLocator(node, after.nodes, { purpose: declared.description }),
+    from: buildLocator(node, after.nodes, {
+      purpose: declared.description,
+      // See candidateStrategies: an extraction locator must never be keyed on the value
+      // it is extracting.
+      forExtraction: true,
+    }),
     as: declared.as,
     ...(declared.pattern ? { pattern: declared.pattern } : {}),
   };
@@ -389,6 +420,10 @@ function postcondition(log: DiscoveryLog, baseUrl: string): Assertion {
   return { kind: 'urlMatches', pattern: escapeRegex(new URL(url, baseUrl).pathname) };
 }
 
+function dropPrefix(name: string, app: string): string {
+  return name.startsWith(`${app}-`) ? name.slice(app.length + 1) : name;
+}
+
 function escapeRegex(text: string): string {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -397,11 +432,58 @@ function escapeRegex(text: string): string {
 // Entry point
 // ---------------------------------------------------------------------------
 
-export function recordArtifact(log: DiscoveryLog, opts: RecordOptions): CapabilityArtifact {
+/**
+ * Checks every declared checkpoint against the page that was actually observed after the
+ * action, and reports the ones that did not hold.
+ *
+ * This is the same principle as verifying locators, applied to the model's claims about
+ * success — and it earns its place. On the first live run against ParaBank the model
+ * clicked "Open New Account", the click did not submit, and it declared
+ * `textPresent: "Account Opened!"` on a page still showing the empty form, then extracted
+ * the "account number" from the account-type dropdown and called finish. Every fact
+ * needed to catch that was already in the action log.
+ *
+ * An artifact built on a checkpoint that was false at record time is not merely
+ * low-quality; it is guaranteed to fail on its first replay, and it will fail as
+ * `CHECKPOINT_FAILED` — an automation-broke error — rather than as what it really is,
+ * which is a discovery run that did not achieve the goal.
+ */
+export async function verifyCheckpoints(log: DiscoveryLog): Promise<string[]> {
+  const contradictions: string[] = [];
+  for (const action of log.actions) {
+    if (!action.checkpoint) continue;
+    const assertion = toAssertion(action.checkpoint);
+    if (!assertion) continue;
+    const observed: Observation = { ...action.after, capturedAt: log.startedAt };
+    const result = await evaluate(assertion, observed);
+    if (!result.ok) {
+      contradictions.push(
+        `step ${action.seq} ("${action.intent}") declared a checkpoint that was false on ` +
+          `the page observed right after the action: ${result.detail}`,
+      );
+    }
+  }
+  return contradictions;
+}
+
+export async function recordArtifact(
+  log: DiscoveryLog,
+  opts: RecordOptions,
+): Promise<CapabilityArtifact> {
   if (log.actions.length === 0) {
     throw new RecorderError(
       `discovery run ${log.runId} recorded no actions (stopped: ${log.stoppedBecause}) — ` +
         `there is nothing to compile into a capability`,
+    );
+  }
+
+  const contradictions = await verifyCheckpoints(log);
+  if (contradictions.length > 0) {
+    throw new RecorderError(
+      `the discovery run claimed success the evidence does not support, so no capability ` +
+        `was written:\n  - ${contradictions.join('\n  - ')}\n` +
+        `The run's evidence is on disk. Re-run discovery — a more capable model, or a ` +
+        `narrower goal — rather than promoting an artifact that will fail on first replay.`,
     );
   }
 
@@ -414,7 +496,9 @@ export function recordArtifact(log: DiscoveryLog, opts: RecordOptions): Capabili
 
   return {
     schemaVersion: '1.0',
-    id: opts.id ?? `${slug(log.app)}.${slug(name)}`,
+    // A model that names the capability "ParaBank — Open New Savings Account" would
+    // otherwise yield "parabank.parabank-open-new-savings-account".
+    id: opts.id ?? `${slug(log.app)}.${dropPrefix(slug(name), slug(log.app))}`,
     version: opts.version ?? '1.0.0',
     name,
     description:

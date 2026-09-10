@@ -32,8 +32,15 @@ import { checkAction, checkNavigation, type Policy } from '../policy/policy.js';
 import type { Redactor } from '../policy/redact.js';
 import type { LeaseManager } from '../escalation/lease.js';
 
-/** Injected into the page to build the normalized node list. */
-const COLLECT = String(`() => {
+/**
+ * Injected into the page to build the normalized node list.
+ *
+ * An IIFE, not a bare arrow function. Playwright evaluates a *string* argument as an
+ * expression, so `() => {…}` evaluates to a function object, which is not serialisable
+ * and comes back as `undefined` — a silent failure with no error to trace. Invoking it in
+ * the source makes the return value the object we want under either interpretation.
+ */
+const COLLECT = String(`(() => {
   const ROLE_BY_TAG = { A: 'link', BUTTON: 'button', SELECT: 'combobox', TEXTAREA: 'textbox',
                         H1: 'heading', H2: 'heading', H3: 'heading', TABLE: 'table', FORM: 'form' };
   const INPUT_ROLES = { text: 'textbox', password: 'textbox', email: 'textbox', tel: 'textbox',
@@ -156,7 +163,7 @@ const COLLECT = String(`() => {
     });
   }
   return { nodes: out, text: document.body ? document.body.innerText : '', title: document.title };
-}`);
+})()`);
 
 export interface WebSurfaceOptions {
   policy: Policy;
@@ -209,11 +216,18 @@ export class PlaywrightWebSurface implements Surface {
   // -------------------------------------------------------------------------
 
   async observe(): Promise<Observation> {
-    const collected = (await this.page.evaluate(COLLECT)) as {
-      nodes: UiNode[];
-      text: string;
-      title: string;
-    };
+    const collected = (await this.page.evaluate(COLLECT)) as
+      | { nodes: UiNode[]; text: string; title: string }
+      | undefined;
+    if (!collected?.nodes) {
+      // Named rather than allowed to surface as "cannot read properties of undefined".
+      // Perception returning nothing is the one failure that makes every later error
+      // misleading, so it gets its own message.
+      throw new Error(
+        `the page-collection script returned nothing for ${this.page.url()} — perception ` +
+          `is broken, not the flow`,
+      );
+    }
     const nodes = collected.nodes;
     const observation = {
       url: this.page.url(),

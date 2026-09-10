@@ -167,9 +167,13 @@ function tool(
   return {
     name,
     description,
-    // `strict` guarantees the arguments validate against this schema, so the loop can parse
-    // tool input without defensive branching on every field.
-    strict: true,
+    // No `strict: true`. It was the obvious choice — guaranteed schema-valid arguments —
+    // but the API rejects this tool set with "Schema is too complex": strict compiles the
+    // whole vocabulary into one constrained-decoding grammar, and twelve tools with
+    // enums and optional fields exceeds it. Narrowing the vocabulary to fit would be
+    // trading a safety boundary for a parsing convenience, so the loop validates instead:
+    // every field is read through a coercion, and a `ref` that is not on the current page
+    // is returned to the model as a tool error it can correct.
     input_schema: {
       type: 'object',
       properties,

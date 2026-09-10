@@ -259,7 +259,10 @@ export async function runDiscovery(opts: DiscoveryOptions): Promise<DiscoveryRes
           case 'press': {
             const before = snapshot(observation);
             const action = await performAction(call.name, input, observation, opts);
-            observation = await opts.surface.observe();
+            // Settled, not immediate — see observeSettled. The "after" snapshot is what
+            // the recorder verifies every checkpoint against, so a stale one poisons the
+            // whole artifact.
+            observation = await observeSettled(opts.surface);
             const after = snapshot(observation);
 
             log.actions.push({
@@ -526,6 +529,40 @@ function textOf(response: Anthropic.Message): string {
 /** URL + node-list hash. Two identical fingerprints in a row means nothing happened. */
 function fingerprint(observation: Observation): string {
   return `${observation.url}#${observation.ariaHash}`;
+}
+
+/**
+ * Observes once the page has stopped moving.
+ *
+ * Observing immediately after an action is the wrong thing and it fails in a way that
+ * looks like the model lying. A click that navigates, or fires an AJAX update, has not
+ * changed anything yet at the moment `act()` returns — so the "after" snapshot is the
+ * *previous* page. The model then declares a checkpoint describing the page it correctly
+ * expects, the recorder checks that claim against a stale observation, and the run is
+ * rejected for hallucinating a success that in fact happened. Both the Sonnet and the
+ * Opus discovery runs failed exactly this way before this existed.
+ *
+ * Polling to quiescence rather than awaiting a Playwright load state, because `Surface`
+ * is the seam a desktop adapter plugs into and "the UI stopped changing" is expressible
+ * there while "domcontentloaded" is not.
+ */
+async function observeSettled(
+  surface: Surface,
+  quietMs = 350,
+  timeoutMs = 8_000,
+): Promise<Observation> {
+  const deadline = Date.now() + timeoutMs;
+  let last = await surface.observe();
+  while (Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, quietMs));
+    const next = await surface.observe();
+    if (next.url === last.url && next.ariaHash === last.ariaHash) return next;
+    last = next;
+  }
+  // Still churning after the budget. Return what we have rather than failing: a page that
+  // never settles (a spinner, a poller) is a real thing the model needs to see and reason
+  // about, not a reason to abandon the run.
+  return last;
 }
 
 function snapshot(observation: Observation): ObservationSnapshot {

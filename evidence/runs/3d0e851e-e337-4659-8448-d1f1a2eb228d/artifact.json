@@ -1,0 +1,328 @@
+{
+  "schemaVersion": "1.0",
+  "id": "parabank.open-parabank-savings-account",
+  "version": "1.0.0",
+  "name": "Open ParaBank SAVINGS Account",
+  "description": "Logs into ParaBank online banking with vault credentials (PARABANK_USERNAME / PARABANK_PASSWORD), opens a new SAVINGS account funded by the customer's default existing account (the minimum opening deposit is transferred from it), and returns `newAccountNumber` from the \"Account Opened!\" confirmation page. Because opening an account and moving the opening deposit cannot be undone, the submit step is marked irreversible and requires human approval on each replay. Business outcomes: LOGIN_REJECTED (credentials not verified) and ACCOUNT_NOT_OPENED (form re-shown with no confirmation, e.g. minimum deposit not covered).",
+  "target": {
+    "app": "parabank",
+    "surfaceKind": "legacy-web",
+    "entryPoint": "/parabank/index.htm"
+  },
+  "inputs": {},
+  "outputs": {
+    "newAccountNumber": {
+      "type": "string",
+      "description": "The account number of the newly opened SAVINGS account."
+    }
+  },
+  "steps": [
+    {
+      "id": "step.enter-the-online-banking-username",
+      "index": 0,
+      "intent": "enter the online banking username",
+      "action": {
+        "type": "fill",
+        "value": {
+          "secretRef": "PARABANK_USERNAME"
+        }
+      },
+      "locator": {
+        "primary": {
+          "kind": "label",
+          "text": "username"
+        },
+        "fallbacks": [
+          {
+            "kind": "nearbyText",
+            "text": "username",
+            "role": "textbox"
+          },
+          {
+            "kind": "css",
+            "selector": "div#loginPanel > form > div:nth-of-type(1) > input"
+          }
+        ],
+        "description": "enter the online banking username — textbox \"username\"",
+        "rationale": "Primary is label, verified unique against the 35 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 0.«redacted»
+      },
+      "extract": [],
+      "onError": [],
+      "risk": "safe",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.enter-the-online-banking-password",
+      "index": 1,
+      "intent": "enter the online banking password",
+      "action": {
+        "type": "fill",
+        "value": {
+          "secretRef": "PARABANK_PASSWORD"
+        }
+      },
+      "locator": {
+        "primary": {
+          "kind": "label",
+          "text": "password"
+        },
+        "fallbacks": [
+          {
+            "kind": "nearbyText",
+            "text": "password",
+            "role": "textbox"
+          },
+          {
+            "kind": "css",
+            "selector": "div#loginPanel > form > div:nth-of-type(2) > input"
+          }
+        ],
+        "description": "enter the online banking password — textbox \"password\"",
+        "rationale": "Primary is label, verified unique against the 35 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 0.«redacted»
+      },
+      "extract": [],
+      "onError": [],
+      "risk": "safe",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.submit-the-login-form",
+      "index": 2,
+      "intent": "submit the login form",
+      "action": {
+        "type": "click"
+      },
+      "locator": {
+        "primary": {
+          "kind": "role",
+          "role": "button",
+          "name": "Log In"
+        },
+        "fallbacks": [
+          {
+            "kind": "text",
+            "text": "Log In"
+          },
+          {
+            "kind": "css",
+            "selector": "div#loginPanel > form > div:nth-of-type(3) > input"
+          }
+        ],
+        "description": "submit the login form — button \"Log In\"",
+        "rationale": "Primary is role, verified unique against the 35 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 1
+      },
+      "checkpoint": {
+        "kind": "all",
+        "of": [
+          {
+            "kind": "urlMatches",
+            "pattern": "/parabank/overview\\.htm"
+          },
+          {
+            "kind": "textPresent",
+            "text": "Accounts Overview"
+          }
+        ]
+      },
+      "extract": [],
+      "onError": [],
+      "risk": "safe",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.go-to-the-open-new-account-page",
+      "index": 3,
+      "intent": "go to the Open New Account page",
+      "action": {
+        "type": "click"
+      },
+      "locator": {
+        "primary": {
+          "kind": "role",
+          "role": "link",
+          "name": "Open New Account"
+        },
+        "fallbacks": [
+          {
+            "kind": "label",
+            "text": "Open New Account"
+          },
+          {
+            "kind": "nearbyText",
+            "text": "Open New Account",
+            "role": "link"
+          },
+          {
+            "kind": "css",
+            "selector": "div#leftPanel > ul > li:nth-of-type(1) > a"
+          }
+        ],
+        "description": "go to the Open New Account page — link \"Open New Account\"",
+        "rationale": "Primary is role, verified unique against the 28 elements observed on this page. 3 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 1
+      },
+      "extract": [],
+      "onError": [],
+      "risk": "irreversible",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.choose-savings-as-the-new-account-type",
+      "index": 4,
+      "intent": "choose SAVINGS as the new account type",
+      "action": {
+        "type": "select",
+        "value": {
+          "literal": "SAVINGS"
+        }
+      },
+      "locator": {
+        "primary": {
+          "kind": "label",
+          "text": "What type of Account would you like to open?"
+        },
+        "fallbacks": [
+          {
+            "kind": "nearbyText",
+            "text": "What type of Account would you like to open?",
+            "role": "combobox"
+          },
+          {
+            "kind": "css",
+            "selector": "select#type"
+          }
+        ],
+        "description": "choose SAVINGS as the new account type — combobox \"What type of Account would you like to open?\"",
+        "rationale": "Primary is label, verified unique against the 30 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 0.«redacted»
+      },
+      "checkpoint": {
+        "kind": "all",
+        "of": [
+          {
+            "kind": "urlMatches",
+            "pattern": "/parabank/openaccount\\.htm"
+          },
+          {
+            "kind": "textPresent",
+            "text": "A minimum of $90.00 must be deposited"
+          }
+        ]
+      },
+      "extract": [],
+      "onError": [],
+      "risk": "safe",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.submit-the-request-to-open-a-new-savings-account",
+      "index": 5,
+      "intent": "submit the request to open a new SAVINGS account (transfers the minimum deposit from the existing account)",
+      "action": {
+        "type": "click"
+      },
+      "locator": {
+        "primary": {
+          "kind": "role",
+          "role": "button",
+          "name": "Open New Account"
+        },
+        "fallbacks": [
+          {
+            "kind": "css",
+            "selector": "div#openAccountForm > form > div > input"
+          }
+        ],
+        "description": "submit the request to open a new SAVINGS account (transfers the minimum deposit from the existing account) — button \"Open New Account\"",
+        "rationale": "Primary is role, verified unique against the 30 elements observed on this page. 1 fallback recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 0.95
+      },
+      "checkpoint": {
+        "kind": "textPresent",
+        "text": "Congratulations, your account is now open."
+      },
+      "extract": [
+        {
+          "name": "newAccountNumber",
+          "from": {
+            "primary": {
+              "kind": "label",
+              "text": "Your new account number"
+            },
+            "fallbacks": [
+              {
+                "kind": "nearbyText",
+                "text": "Your new account number",
+                "role": "link"
+              },
+              {
+                "kind": "css",
+                "selector": "a#newAccountId"
+              }
+            ],
+            "description": "The account number of the newly opened SAVINGS account. — link \"21558\"",
+            "rationale": "Primary is label, verified unique against the 28 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+            "confidence": 0.«redacted»
+          },
+          "as": "string",
+          "pattern": "(\\d{3,})"
+        }
+      ],
+      "onError": [],
+      "risk": "irreversible",
+      "timeoutMs": 15000
+    }
+  ],
+  "outcomes": [
+    {
+      "name": "LOGIN_REJECTED",
+      "description": "The supplied username/password were not accepted, so no account can be opened.",
+      "detect": {
+        "kind": "textPresent",
+        "text": "The username and password could not be verified."
+      },
+      "terminal": true,
+      "extract": []
+    },
+    {
+      "name": "ACCOUNT_NOT_OPENED",
+      "description": "The open-account request was submitted but the bank did not create an account (e.g. the funding account cannot cover the minimum opening deposit); the form is still shown and no confirmation number is issued.",
+      "detect": {
+        "kind": "all",
+        "of": [
+          {
+            "kind": "textPresent",
+            "text": "What type of Account would you like to open?"
+          },
+          {
+            "kind": "textAbsent",
+            "text": "Congratulations, your account is now open."
+          }
+        ]
+      },
+      "terminal": true,
+      "extract": []
+    }
+  ],
+  "postcondition": {
+    "kind": "textPresent",
+    "text": "Congratulations, your account is now open."
+  },
+  "policy": {
+    "riskClass": "irreversible",
+    "requiresApproval": true,
+    "allowedDomains": [
+      "parabank.parasoft.com"
+    ]
+  },
+  "provenance": {
+    "discoveredAt": "2026-09-10T22:28:39.411Z",
+    "model": "claude-opus-5",
+    "runId": "3d0e851e-e337-4659-8448-d1f1a2eb228d",
+    "evidenceRef": "evidence/runs/3d0e851e-e337-4659-8448-d1f1a2eb228d",
+    "humanEdits": []
+  }
+}

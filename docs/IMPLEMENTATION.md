@@ -3,18 +3,17 @@
 Execution tracker for `docs/PLAN.md`. Check items off as they complete.
 Resume rule: find the first unchecked box, do that.
 
-**State as of last session:** M0-M7 complete — 110 tests green, typecheck clean. The
-discovery loop, the recorder and `npm run discover` are all written; fixtures are
-captured. The one thing outstanding is the **live** discovery run, blocked on API
-credits (see below). Next code action is M8 (escalation console).
+**State as of last session:** M0-M8 complete — 128 tests green, typecheck clean.
+The live discovery run **works end to end** against ParaBank and produced
+`capabilities/parabank.open-parabank-savings-account.json`. Next code action is M9
+(evidence capture) then M10/M11.
 
 **Environment notes**
 - Node v23.7.0, npm 11.6.2, git 2.39.2 — all present.
 - Chromium **is** installed (`chromium-1243` plus the headless shell).
-- `ANTHROPIC_API_KEY` is set in `.env` (gitignored) and now authenticates: the earlier
-  organization-scoped key was replaced with a default-workspace one. **The account has
-  no API credits**, so every call returns `invalid_request_error: Your credit balance is
-  too low`. Nothing else blocks `npm run discover`.
+- `ANTHROPIC_API_KEY` is set in `.env` (gitignored), workspace-scoped, and credited.
+  Discovery runs cost roughly 3k output tokens; prompt caching carries ~107k input
+  tokens per run at ~22 uncached.
 - `ANTHROPIC_WORKSPACE_ID` is read by `newClient()` in `src/agent/loop.ts` if an
   organization-scoped key is ever used again.
 - ParaBank reachable: `https://parabank.parasoft.com/parabank/index.htm` → HTTP 200.
@@ -93,8 +92,40 @@ credits (see below). Next code action is M8 (escalation console).
 - [x] `src/artifact/recorder.ts` — consumes the **structured action log**, never model prose: resolve locators + fallback chains from the live observation, synthesise checkpoints, canonicalise URLs (`?id=12345` → `{{accountId}}`), promote literals to `valueFrom` references
 - [x] Ambiguity during discovery → escalate; the operator's pick is what gets recorded
 - [x] `src/cli/discover.ts`
-- [ ] Live run: `npm run discover -- --goal "open a new savings account and read back the new account number" --target https://parabank.parasoft.com/parabank/index.htm` *(blocked: no API credits on the account)*
-- [ ] Verify the recorded artifact replays
+- [x] Live run — works. Sonnet 5 first, as asked; its artifact was rejected (below), so
+      the committed one is Opus 5 at effort `high`:
+      `npm run discover -- --goal "log in, open a new SAVINGS account, and read back the
+      new account number shown on the confirmation" --model claude-opus-5 --headless`
+- [x] `--from-run <runId>` re-compiles the artifact from a saved discovery log. Every real
+      run opens an actual account on a public demo, so iterating on the recorder must not
+      require iterating on the bank.
+- [ ] Verify the recorded artifact replays *(needs `src/cli/replay.ts`, which does not exist
+      yet even though `package.json` has the script — M11)*
+
+**What the live runs actually taught us.** Four failures, all real, all now fixed and tested:
+
+1. `page.evaluate(COLLECT)` returned `undefined` for every observation. Playwright evaluates
+   a *string* argument as an expression, so a bare `() => {…}` yields an unserialisable
+   function object. Now an IIFE, and `observe()` throws a named error rather than letting
+   perception fail silently.
+2. `strict: true` on the tool schemas → HTTP 400 `Schema is too complex`. Constrained
+   decoding compiles the whole vocabulary into one grammar and twelve tools exceed it.
+   Dropped; the loop validates defensively instead. (`count_tokens` does *not* catch this —
+   it validated the same tools happily.)
+3. **The loop observed too early.** After `act()` it called `observe()` immediately, so a
+   click that navigates or fires AJAX was recorded against the *previous* page. Both models
+   then declared checkpoints the stale snapshot contradicted, and looked like they were
+   hallucinating success. `observeSettled()` polls to quiescence instead.
+4. The extract locator was keyed on the value being extracted — `role=link name="21558"`,
+   the account number that run had just created. It would resolve exactly once, ever.
+   Extraction locators now exclude every strategy derived from the node's own name.
+
+**Sonnet 5 vs Opus 5 on this task.** Sonnet: 0 business outcomes, extracted the account
+number from the account-type dropdown, hardcoded the username as a literal. Opus: 2
+outcomes with real detectors (`LOGIN_REJECTED`, `ACCOUNT_NOT_OPENED`), both credentials as
+`secretRef`, a correct regex extract, and both irreversible steps flagged. The recorder's
+checkpoint verification rejected the pre-fix runs of *both* models, which is the check
+doing its job — but note that fix 3 was the real cause, so this is not purely a model gap.
 - [x] Tests (`tests/recorder.test.ts`, 16): every synthesised strategy resolves through
       `resolveLocator`; an ambiguous strategy is discarded rather than recorded; css-only
       locators are low-confidence and say so; the stricter of model hint and policy pattern
@@ -102,14 +133,35 @@ credits (see below). Next code action is M8 (escalation console).
 
 ## M8 — Escalation & handoff
 
-- [ ] `src/escalation/lease.ts` — `SessionLease` with `epoch`, compare-and-swap acquire, expiry
-- [ ] `Surface.act()` hard-gates on the lease (automation *cannot* act while human-held)
-- [ ] `src/escalation/broker.ts` — `InterventionRequest` (capability id+version, tenant, goal, step id + **intent**, expected vs observed, error class, screenshot, aria snapshot, URL, runId, evidence path); `resumeToken` binding `{runId,sessionId,stepId,artifactVersion,leaseEpoch}`
-- [ ] Human-action recorder — `framenavigated` + `addInitScript`/`exposeBinding` input capture, **values redacted at capture time**, before/after screenshots
-- [ ] `src/escalation/console/` — Express + one HTML page, screenshot poll, Take control / Release
-- [ ] Resume: re-observe → re-assert precondition → check checkpoint (satisfied ⇒ `completed_by_human`, advance) → check outcome detectors → else `RESUME_STATE_UNRECOGNIZED`; fresh step budget; irreversible steps never auto-resumed
-- [ ] `src/cli/operator.ts`
-- [ ] Test: force ambiguity, confirm automation cannot act while lease is human-held, complete manually, resume, confirm engine detects the satisfied checkpoint and advances rather than repeating
+- [x] `src/escalation/lease.ts` — `SessionLease` with `epoch`, compare-and-swap acquire, expiry
+- [x] `Surface.act()` hard-gates on the lease (automation *cannot* act while human-held)
+- [x] `src/escalation/broker.ts` — `InterventionRequest` (capability id+version, tenant, goal,
+      step id + **intent**, expected vs observed, error class, screenshot, aria snapshot, URL,
+      runId, evidence path); `resumeToken` binding `{runId,sessionId,stepId,artifactVersion,leaseEpoch}`
+- [x] Human-action recorder (`src/escalation/human-recorder.ts`) — `addInitScript` +
+      `exposeBinding`, re-installed on `framenavigated`, **values reduced to a shape inside
+      the page** ("14 characters", "a password") so plaintext never leaves the document;
+      before/after screenshots
+- [x] `src/escalation/console/` — Express (`server.ts`) + one inline HTML page (`page.ts`),
+      screenshot poll, Take control / finished / approve / decline. Claim carries the epoch
+      the page last saw, so two operators racing get a refusal rather than an interleaving.
+- [x] Resume: re-observe → checkpoint (satisfied ⇒ `completed_by_human`, advance) → outcome
+      detectors → precondition (retry, **safe steps only**) → else `RESUME_STATE_UNRECOGNIZED`
+- [x] `src/cli/operator.ts`
+- [x] Test (`tests/escalation.test.ts`, 16): the headline handoff test — force a genuine
+      `LOCATOR_AMBIGUOUS`, confirm nothing was clicked, complete it by hand, resume, and
+      confirm the engine records `completed_by_human` and advances with **zero clicks ever
+      reaching the surface across both runs**. Plus: the lease gate tested against the *real*
+      `PlaywrightWebSurface.act()` rather than a stub; every resume-token rejection path;
+      an irreversible step is never auto-retried; and the recorder proven not to leak a
+      typed password or username.
+
+**Resume-token semantics, decided during implementation.** The token is issued when control
+comes *back* to automation, not when the intervention opens. Issuing it earlier looks more
+careful and is useless: the handoff itself moves the lease twice (take, release), so a token
+pinned to the pre-handoff epoch is guaranteed stale and the check would have to be weakened
+to nothing. Pinned at the point of return it means something falsifiable — no *further*
+transfer happened between the operator handing the session back and automation picking it up.
 
 ## M9 — Evidence
 
