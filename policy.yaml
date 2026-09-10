@@ -1,0 +1,88 @@
+# Guardrail configuration.
+#
+# Enforced inside Surface.act(), which is the single chokepoint both discovery and replay
+# pass through. There is no second path by which an action can reach the application.
+
+# Origins automation may navigate to. Matched by PARSED ORIGIN, never by string prefix:
+# "https://parabank.parasoft.com.evil.tld/" shares a prefix with the real host but is a
+# different origin entirely.
+allowedOrigins:
+  - https://parabank.parasoft.com
+  # Local fixture server, for the offline replay path.
+  - http://127.0.0.1:8787
+
+# Path globs within an allowed origin. "**" matches any remainder.
+allowedPaths:
+  - /parabank/**
+  - /**
+
+# Only these schemes are ever navigable.
+allowedSchemes:
+  - http
+  - https
+
+# The closed action vocabulary. Anything not listed cannot be expressed, which is a
+# stronger guarantee than filtering a general one — there is no expression to sanitise.
+allowedActions:
+  - navigate
+  - click
+  - fill
+  - select
+  - press
+  - wait
+
+# Capabilities the surface refuses outright. New tabs matter because an unconstrained new
+# tab is how an automation escapes the surface it was scoped to.
+deniedCapabilities:
+  - download
+  - upload
+  - newTab
+  - evaluateScript
+  - dialog
+
+# Steps whose intent matches any of these are classified `irreversible` and require human
+# confirmation through the escalation path on EVERY replay, not just the first.
+#
+# Known limit: this is a heuristic and will miss a button labelled "Continue" that commits
+# a wire. The real control is human review of the artifact at promotion time; this pattern
+# list exists to make that review cheap and focused, not to be correct on its own.
+irreversiblePatterns:
+  - transfer
+  - pay|payment|bill pay
+  - send money
+  - submit .*(loan|application|request)
+  - open .*account
+  - close .*account
+  - delete|remove|cancel
+  - confirm|authorise|authorize
+
+# Applied at every write boundary: run log, artifact, extracted outputs, intervention
+# records. Screenshots additionally mask credential fields via Playwright's `mask:`.
+redaction:
+  # Any env var named like this resolves a secret; its VALUE is redacted wherever it appears.
+  secretEnvPatterns:
+    - .*PASSWORD.*
+    - .*SECRET.*
+    - .*TOKEN.*
+    - .*API_KEY.*
+    - .*USERNAME.*
+  # Value-shaped patterns redacted even when we never held the secret ourselves.
+  valuePatterns:
+    - name: ssn
+      pattern: '\b\d{3}-\d{2}-\d{4}\b'
+    - name: pan
+      pattern: '\b(?:\d[ -]?){13,19}\b'
+  # Selectors masked in screenshots.
+  maskSelectors:
+    - "input[type='password']"
+    - "input[name='password']"
+
+# Bounded effort. A runaway loop against a bank's back-office app is a self-inflicted
+# denial of service on a system tellers are actively using.
+budgets:
+  maxStepsPerReplay: 60
+  maxDiscoverySteps: 40
+  wallClockMs: 300000
+  maxRetriesPerStep: 2
+  # Deliberate pacing, also ParaBank hygiene: it is somebody's public demo instance.
+  minDelayBetweenActionsMs: 250
