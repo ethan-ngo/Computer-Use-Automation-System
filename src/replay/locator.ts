@@ -91,8 +91,15 @@ function contains(haystack: string | undefined, needle: string): boolean {
   return normalize(haystack).includes(normalize(needle));
 }
 
-/** Nodes matching one strategy. Structural strategies only; css/nth handled by the caller. */
-function matchStructural(nodes: UiNode[], strategy: Strategy): UiNode[] | undefined {
+/**
+ * Nodes matching one strategy. Structural strategies only; css/nth handled by the caller.
+ *
+ * Exported because the recorder checks candidate locators for uniqueness *before* writing
+ * them into an artifact, and it must use this exact function to do it. A recorder with its
+ * own notion of "matches" would happily record locators that the replay engine then fails
+ * to resolve — the two would drift apart silently, and only in production.
+ */
+export function matchStrategy(nodes: UiNode[], strategy: Strategy): UiNode[] | undefined {
   switch (strategy.kind) {
     case 'role':
       return nodes.filter(
@@ -125,7 +132,7 @@ async function candidatesFor(
   strategy: Strategy,
   matchCss?: CssMatcher,
 ): Promise<UiNode[]> {
-  const structural = matchStructural(observation.nodes, strategy);
+  const structural = matchStrategy(observation.nodes, strategy);
   if (structural) return structural;
 
   if (!matchCss) return [];
