@@ -1,0 +1,288 @@
+{
+  "schemaVersion": "1.0",
+  "id": "parabank.open-new-savings-account",
+  "version": "1.0.0",
+  "name": "Open New Savings Account",
+  "description": "Logs into ParaBank with a username (input) and password (secret), navigates to Open New Account, selects the SAVINGS account type (funded from the customer's existing default source account), submits the request, and extracts the newly created account number as output \"newAccountNumber\". This action is irreversible (it opens a real account and may transfer a minimum $90 funding deposit) and requires human approval on replay. No alternate business outcomes (e.g. insufficient funds) were observed during this flow since the destination/source account combo defaulted successfully; if the source account lacks sufficient funds ParaBank may reject the request — this was not encountered here and would need separate handling if seen.",
+  "target": {
+    "app": "parabank",
+    "surfaceKind": "legacy-web",
+    "entryPoint": "/parabank/index.htm"
+  },
+  "inputs": {},
+  "outputs": {
+    "newAccountNumber": {
+      "type": "string",
+      "description": "The account number of the newly opened SAVINGS account"
+    }
+  },
+  "steps": [
+    {
+      "id": "step.enter-password",
+      "index": 0,
+      "intent": "enter password",
+      "action": {
+        "type": "fill",
+        "value": {
+          "secretRef": "PARABANK_PASSWORD"
+        }
+      },
+      "locator": {
+        "primary": {
+          "kind": "label",
+          "text": "password"
+        },
+        "fallbacks": [
+          {
+            "kind": "nearbyText",
+            "text": "password",
+            "role": "textbox"
+          },
+          {
+            "kind": "css",
+            "selector": "div#loginPanel > form > div:nth-of-type(2) > input"
+          }
+        ],
+        "description": "enter password — textbox \"password\"",
+        "rationale": "Primary is label, verified unique against the 35 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 0.«redacted»
+      },
+      "extract": [],
+      "onError": [],
+      "risk": "safe",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.enter-username",
+      "index": 1,
+      "intent": "enter username",
+      "action": {
+        "type": "fill",
+        "value": {
+          "literal": "«redacted»"
+        }
+      },
+      "locator": {
+        "primary": {
+          "kind": "label",
+          "text": "username"
+        },
+        "fallbacks": [
+          {
+            "kind": "nearbyText",
+            "text": "username",
+            "role": "textbox"
+          },
+          {
+            "kind": "css",
+            "selector": "div#loginPanel > form > div:nth-of-type(1) > input"
+          }
+        ],
+        "description": "enter username — textbox \"username\"",
+        "rationale": "Primary is label, verified unique against the 35 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 0.«redacted»
+      },
+      "extract": [],
+      "onError": [],
+      "risk": "safe",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.submit-login-form",
+      "index": 2,
+      "intent": "submit login form",
+      "action": {
+        "type": "click"
+      },
+      "locator": {
+        "primary": {
+          "kind": "role",
+          "role": "button",
+          "name": "Log In"
+        },
+        "fallbacks": [
+          {
+            "kind": "text",
+            "text": "Log In"
+          },
+          {
+            "kind": "css",
+            "selector": "div#loginPanel > form > div:nth-of-type(3) > input"
+          }
+        ],
+        "description": "submit login form — button \"Log In\"",
+        "rationale": "Primary is role, verified unique against the 35 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 1
+      },
+      "checkpoint": {
+        "kind": "all",
+        "of": [
+          {
+            "kind": "urlMatches",
+            "pattern": "overview\\.htm"
+          },
+          {
+            "kind": "textPresent",
+            "text": "Accounts Overview"
+          }
+        ]
+      },
+      "extract": [],
+      "onError": [],
+      "risk": "safe",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.go-to-open-new-account-page",
+      "index": 3,
+      "intent": "go to open new account page",
+      "action": {
+        "type": "click"
+      },
+      "locator": {
+        "primary": {
+          "kind": "role",
+          "role": "link",
+          "name": "Open New Account"
+        },
+        "fallbacks": [
+          {
+            "kind": "label",
+            "text": "Open New Account"
+          },
+          {
+            "kind": "nearbyText",
+            "text": "Open New Account",
+            "role": "link"
+          },
+          {
+            "kind": "css",
+            "selector": "div#leftPanel > ul > li:nth-of-type(1) > a"
+          }
+        ],
+        "description": "go to open new account page — link \"Open New Account\"",
+        "rationale": "Primary is role, verified unique against the 29 elements observed on this page. 3 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 1
+      },
+      "checkpoint": {
+        "kind": "urlMatches",
+        "pattern": "openaccount\\.htm"
+      },
+      "extract": [],
+      "onError": [],
+      "risk": "irreversible",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.select-savings-account-type",
+      "index": 4,
+      "intent": "select SAVINGS account type",
+      "action": {
+        "type": "select",
+        "value": {
+          "literal": "SAVINGS"
+        }
+      },
+      "locator": {
+        "primary": {
+          "kind": "label",
+          "text": "What type of Account would you like to open?"
+        },
+        "fallbacks": [
+          {
+            "kind": "nearbyText",
+            "text": "What type of Account would you like to open?",
+            "role": "combobox"
+          },
+          {
+            "kind": "css",
+            "selector": "select#type"
+          }
+        ],
+        "description": "select SAVINGS account type — combobox \"What type of Account would you like to open?\"",
+        "rationale": "Primary is label, verified unique against the 30 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 0.«redacted»
+      },
+      "extract": [],
+      "onError": [],
+      "risk": "safe",
+      "timeoutMs": 15000
+    },
+    {
+      "id": "step.submit-open-new-savings-account-request",
+      "index": 5,
+      "intent": "submit open new savings account request",
+      "action": {
+        "type": "click"
+      },
+      "locator": {
+        "primary": {
+          "kind": "role",
+          "role": "button",
+          "name": "Open New Account"
+        },
+        "fallbacks": [
+          {
+            "kind": "css",
+            "selector": "div#openAccountForm > form > div > input"
+          }
+        ],
+        "description": "submit open new savings account request — button \"Open New Account\"",
+        "rationale": "Primary is role, verified unique against the 30 elements observed on this page. 1 fallback recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+        "confidence": 0.95
+      },
+      "checkpoint": {
+        "kind": "textPresent",
+        "text": "Account Opened!"
+      },
+      "extract": [
+        {
+          "name": "newAccountNumber",
+          "from": {
+            "primary": {
+              "kind": "label",
+              "text": "What type of Account would you like to open?"
+            },
+            "fallbacks": [
+              {
+                "kind": "nearbyText",
+                "text": "What type of Account would you like to open?",
+                "role": "combobox"
+              },
+              {
+                "kind": "css",
+                "selector": "select#type"
+              }
+            ],
+            "description": "The account number of the newly opened SAVINGS account — combobox \"What type of Account would you like to open?\"",
+            "rationale": "Primary is label, verified unique against the 30 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
+            "confidence": 0.«redacted»
+          },
+          "as": "string"
+        }
+      ],
+      "onError": [],
+      "risk": "irreversible",
+      "timeoutMs": 15000
+    }
+  ],
+  "outcomes": [],
+  "postcondition": {
+    "kind": "textPresent",
+    "text": "Account Opened!"
+  },
+  "policy": {
+    "riskClass": "irreversible",
+    "requiresApproval": true,
+    "allowedDomains": [
+      "parabank.parasoft.com"
+    ]
+  },
+  "provenance": {
+    "discoveredAt": "2026-09-10T22:18:00.749Z",
+    "model": "claude-sonnet-5",
+    "runId": "b48d442e-d3b8-46bd-b6a7-c8d0d2951bac",
+    "evidenceRef": "evidence/runs/b48d442e-d3b8-46bd-b6a7-c8d0d2951bac",
+    "humanEdits": []
+  }
+}

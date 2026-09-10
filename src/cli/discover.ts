@@ -11,6 +11,8 @@
  */
 
 import { randomUUID } from 'node:crypto';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { relative } from 'node:path';
 import { loadPolicy } from '../policy/policy.js';
@@ -21,6 +23,7 @@ import { FileRunLogger } from '../evidence/logger.js';
 import { runDiscovery, type EscalationHandler } from '../agent/loop.js';
 import { recordArtifact } from '../artifact/recorder.js';
 import { saveArtifact } from '../artifact/store.js';
+import type { DiscoveryLog } from '../agent/tools.js';
 
 interface Args {
   goal: string;
@@ -33,6 +36,13 @@ interface Args {
   interactive: boolean;
   inputs: Record<string, string>;
   id?: string;
+}
+
+/** Reads a single `--name value` flag ahead of full parsing. */
+function arg(name: string): string | undefined {
+  const i = process.argv.indexOf(`--${name}`);
+  const value = i >= 0 ? process.argv[i + 1] : undefined;
+  return value && !value.startsWith('--') ? value : undefined;
 }
 
 function parseArgs(argv: string[]): Args {
@@ -92,7 +102,33 @@ function terminalEscalation(): EscalationHandler {
   };
 }
 
+/**
+ * Re-compiles the artifact from a run that already happened.
+ *
+ * Worth having for a reason that is not convenience: every discovery run against this
+ * application opens a real account on somebody's public demo. When the recorder changes —
+ * and it changed three times while being built — re-running discovery to see the effect
+ * costs another account and another few minutes. Replaying the *log* costs neither, and
+ * it tests the recorder against real captured evidence rather than a fixture.
+ */
+async function rerecord(runId: string): Promise<void> {
+  const policy = loadPolicy();
+  const file = join(process.cwd(), 'evidence', 'runs', runId, 'discovery.json');
+  const log = JSON.parse(await readFile(file, 'utf-8')) as DiscoveryLog;
+
+  const artifact = await recordArtifact(log, {
+    policy,
+    evidenceRef: `evidence/runs/${runId}`,
+  });
+  const out = await saveArtifact(artifact);
+  console.log(`re-recorded ${artifact.id}@${artifact.version} from ${runId}`);
+  console.log(`  → ${relative(process.cwd(), out)}`);
+}
+
 async function main(): Promise<void> {
+  const fromRun = arg('from-run');
+  if (fromRun) return rerecord(fromRun);
+
   const args = parseArgs(process.argv.slice(2));
   const runId = randomUUID();
 
@@ -160,7 +196,7 @@ async function main(): Promise<void> {
       return;
     }
 
-    const artifact = recordArtifact(log, {
+    const artifact = await recordArtifact(log, {
       policy,
       evidenceRef: `evidence/runs/${runId}`,
       ...(args.id ? { id: args.id } : {}),

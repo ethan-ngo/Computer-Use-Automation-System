@@ -130,6 +130,22 @@ describe('locator synthesis', () => {
     }
   });
 
+  it('never keys an extraction locator on the value being extracted', () => {
+    // The live Opus run recorded the new account number as role=link name="21336" — the
+    // number it had just created. That locator resolves exactly once, on the run that
+    // wrote it. Where a value lives is described by what is around it, never by itself.
+    const value = node({ ref: 'e1', role: 'link', name: '21336', labelHint: 'New account number' });
+    const other = node({ ref: 'e2', role: 'link', name: 'Accounts Overview' });
+
+    const acting = buildLocator(value, [value, other]);
+    expect(acting.primary).toEqual({ kind: 'role', role: 'link', name: '21336' });
+
+    const extracting = buildLocator(value, [value, other], { forExtraction: true });
+    const strategies = [extracting.primary, ...extracting.fallbacks];
+    expect(JSON.stringify(strategies)).not.toContain('21336');
+    expect(extracting.primary).toEqual({ kind: 'label', text: 'New account number' });
+  });
+
   it('marks a locator high-confidence when an operator chose the element', () => {
     const bare = node({ ref: 'e1', role: 'cell', name: '', cssPath: 'td#z' });
     expect(buildLocator(bare, [bare], { humanChose: true }).confidence).toBeGreaterThanOrEqual(0.9);
@@ -163,10 +179,16 @@ describe('recording an artifact', () => {
   const accountNumber = node({ ref: 'e9', role: 'link', name: '13566', labelHint: 'Account' });
 
   const loginPage = snap([usernameField, passwordField, loginButton]);
-  const resultPage = snap([accountNumber], { url: 'https://parabank.parasoft.com/parabank/openaccount.htm' });
+  // The text matters: the recorder now verifies every declared checkpoint against the
+  // page that was actually observed, so a fixture whose text does not support its own
+  // checkpoint is rejected — exactly as a real run making that claim would be.
+  const resultPage = snap([accountNumber], {
+    url: 'https://parabank.parasoft.com/parabank/openaccount.htm',
+    text: 'Accounts Overview Account Opened! Your new account number is 13566',
+  });
 
-  it('compiles a valid artifact that survives a round trip through the schema', () => {
-    const artifact = recordArtifact(
+  it('compiles a valid artifact that survives a round trip through the schema', async () => {
+    const artifact = await recordArtifact(
       log({
         actions: [
           action({
@@ -211,8 +233,8 @@ describe('recording an artifact', () => {
     expect(artifact.postcondition).toEqual({ kind: 'textPresent', text: 'Accounts Overview' });
   });
 
-  it('keeps a secret as a reference and never as a value', () => {
-    const artifact = recordArtifact(
+  it('keeps a secret as a reference and never as a value', async () => {
+    const artifact = await recordArtifact(
       log({
         actions: [
           action({
@@ -233,10 +255,10 @@ describe('recording an artifact', () => {
     expect(JSON.stringify(artifact)).not.toContain('demo');
   });
 
-  it('takes the stricter risk of the model hint and the policy pattern', () => {
+  it('takes the stricter risk of the model hint and the policy pattern', async () => {
     // The model said "safe"; the policy's pattern list says "open .*account".
     // Under-marking costs a real transaction, so the policy wins.
-    const artifact = recordArtifact(
+    const artifact = await recordArtifact(
       log({
         actions: [
           action({
@@ -256,8 +278,8 @@ describe('recording an artifact', () => {
     expect(artifact.policy.riskClass).toBe('irreversible');
   });
 
-  it('honours an irreversible hint the policy pattern list would have missed', () => {
-    const artifact = recordArtifact(
+  it('honours an irreversible hint the policy pattern list would have missed', async () => {
+    const artifact = await recordArtifact(
       log({
         actions: [
           action({
@@ -276,8 +298,8 @@ describe('recording an artifact', () => {
     expect(artifact.steps[0]!.risk).toBe('irreversible');
   });
 
-  it('records declared business outcomes into the contract', () => {
-    const artifact = recordArtifact(
+  it('records declared business outcomes into the contract', async () => {
+    const artifact = await recordArtifact(
       log({
         actions: [action({ intent: 'apply for a loan', tool: 'click', targetRef: 'e3', before: loginPage, after: resultPage })],
         outcomes: [
@@ -297,8 +319,8 @@ describe('recording an artifact', () => {
     expect(artifact.outcomes[0]!.terminal).toBe(true);
   });
 
-  it('refuses to record a step whose target was not in the observation', () => {
-    expect(() =>
+  it('refuses to record a step whose target was not in the observation', async () => {
+    await expect(
       recordArtifact(
         log({
           actions: [
@@ -307,17 +329,17 @@ describe('recording an artifact', () => {
         }),
         { policy, evidenceRef: 'e' },
       ),
-    ).toThrow(RecorderError);
+    ).rejects.toThrow(RecorderError);
   });
 
-  it('refuses to compile a run that recorded no actions', () => {
-    expect(() => recordArtifact(log({ actions: [], stoppedBecause: 'no_progress' }), { policy, evidenceRef: 'e' })).toThrow(
-      /nothing to compile/,
-    );
+  it('refuses to compile a run that recorded no actions', async () => {
+    await expect(
+      recordArtifact(log({ actions: [], stoppedBecause: 'no_progress' }), { policy, evidenceRef: 'e' }),
+    ).rejects.toThrow(/nothing to compile/);
   });
 
-  it('flags a run that never called finish, in the description a reviewer reads', () => {
-    const artifact = recordArtifact(
+  it('flags a run that never called finish, in the description a reviewer reads', async () => {
+    const artifact = await recordArtifact(
       {
         ...log({ actions: [action({ intent: 'log in', tool: 'click', targetRef: 'e3', before: loginPage, after: resultPage })] }),
         finish: undefined,
@@ -329,8 +351,33 @@ describe('recording an artifact', () => {
     expect(artifact.description).toMatch(/needs review/i);
   });
 
-  it('gives colliding intents distinct, stable step ids', () => {
-    const artifact = recordArtifact(
+  it('refuses a checkpoint the observed page contradicts', async () => {
+    // The live failure this is written from: Sonnet clicked "Open New Account", the click
+    // did not submit, and it declared "Account Opened!" on a page still showing the empty
+    // form. The evidence to catch it was already in the action log.
+    const stillTheForm = snap([loginButton], { text: 'What type of Account would you like to open?' });
+
+    await expect(
+      recordArtifact(
+        log({
+          actions: [
+            action({
+              intent: 'submit the new account request',
+              tool: 'click',
+              targetRef: 'e3',
+              before: loginPage,
+              after: stillTheForm,
+              checkpoint: { textPresent: 'Account Opened!' },
+            }),
+          ],
+        }),
+        { policy, evidenceRef: 'e' },
+      ),
+    ).rejects.toThrow(/claimed success the evidence does not support/);
+  });
+
+  it('gives colliding intents distinct, stable step ids', async () => {
+    const artifact = await recordArtifact(
       log({
         actions: [
           action({ seq: 1, intent: 'enter an amount', tool: 'fill', targetRef: 'e1', value: { literal: '100' }, before: loginPage, after: loginPage }),

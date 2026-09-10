@@ -1,0 +1,4013 @@
+{
+  "runId": "3d0e851e-e337-4659-8448-d1f1a2eb228d",
+  "goal": "log in, open a new SAVINGS account, and read back the new account number shown on the confirmation",
+  "model": "claude-opus-5",
+  "startedAt": "2026-09-10T22:28:39.411Z",
+  "app": "parabank",
+  "baseUrl": "https://parabank.parasoft.com",
+  "entryPoint": "/parabank/index.htm",
+  "actions": [
+    {
+      "seq": 1,
+      "intent": "enter the online banking username",
+      "tool": "fill",
+      "targetRef": "e10",
+      "value": {
+        "secretRef": "«redacted»"
+      },
+      "before": {
+        "url": "https://parabank.parasoft.com/parabank/index.htm",
+        "title": "ParaBank | Welcome | Online Banking",
+        "ariaHash": "c2a8308a7eb3ff9672514555a2a635f1ac7d0542",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Customer Login",
+            "enabled": true,
+            "labelHint": "Customer Login Username Password Forgot login info? Register",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "textbox",
+            "name": "",
+            "value": "",
+            "enabled": true,
+            "labelHint": "username",
+            "cssPath": "div#loginPanel > form > div:nth-of-type(1) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "textbox",
+            "name": "",
+            "value": "",
+            "enabled": true,
+            "labelHint": "password",
+            "cssPath": "div#loginPanel > form > div:nth-of-type(2) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "button",
+            "name": "Log In",
+            "value": "Log In",
+            "enabled": true,
+            "cssPath": "div#loginPanel > form > div:nth-of-type(3) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Forgot login info?",
+            "enabled": true,
+            "labelHint": "Forgot login info?",
+            "cssPath": "div#loginPanel > p:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Register",
+            "enabled": true,
+            "labelHint": "Register",
+            "cssPath": "div#loginPanel > p:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Withdraw Funds",
+            "enabled": true,
+            "labelHint": "Withdraw Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Check Balances",
+            "enabled": true,
+            "labelHint": "Check Balances",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "link",
+            "name": "Make Deposits",
+            "enabled": true,
+            "labelHint": "Make Deposits",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "link",
+            "name": "Account History",
+            "enabled": true,
+            "labelHint": "Account History",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Read More",
+            "enabled": true,
+            "labelHint": "Read More",
+            "cssPath": "div#rightPanel > p:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "ParaBank Is Now Re-Opened",
+            "enabled": true,
+            "labelHint": "ParaBank Is Now Re-Opened",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "New! Online Bill Pay",
+            "enabled": true,
+            "labelHint": "New! Online Bill Pay",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "New! Online Account Transfers",
+            "enabled": true,
+            "labelHint": "New! Online Account Transfers",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Read More",
+            "enabled": true,
+            "labelHint": "Read More",
+            "cssPath": "div#rightPanel > p:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e31",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e32",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e33",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e34",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e35",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\nCustomer Login\n\nUsername\n\nPassword\n\nForgot login info?\n\nRegister\n\n \nATM Services\nWithdraw Funds\nTransfer Funds\nCheck Balances\nMake Deposits\nOnline Services\nBill Pay\nAccount History\nTransfer Funds\n\nREAD MORE\n\nLATEST NEWS\n09/10/2026\nParaBank Is Now Re-Opened\nNew! Online Bill Pay\nNew! Online Account Transfers\n\nREAD MORE\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "after": {
+        "url": "https://parabank.parasoft.com/parabank/index.htm",
+        "title": "ParaBank | Welcome | Online Banking",
+        "ariaHash": "c2a8308a7eb3ff9672514555a2a635f1ac7d0542",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Customer Login",
+            "enabled": true,
+            "labelHint": "Customer Login Username Password Forgot login info? Register",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "textbox",
+            "name": "",
+            "value": "«redacted»",
+            "enabled": true,
+            "labelHint": "username",
+            "cssPath": "div#loginPanel > form > div:nth-of-type(1) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "textbox",
+            "name": "",
+            "value": "",
+            "enabled": true,
+            "labelHint": "password",
+            "cssPath": "div#loginPanel > form > div:nth-of-type(2) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "button",
+            "name": "Log In",
+            "value": "Log In",
+            "enabled": true,
+            "cssPath": "div#loginPanel > form > div:nth-of-type(3) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Forgot login info?",
+            "enabled": true,
+            "labelHint": "Forgot login info?",
+            "cssPath": "div#loginPanel > p:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Register",
+            "enabled": true,
+            "labelHint": "Register",
+            "cssPath": "div#loginPanel > p:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Withdraw Funds",
+            "enabled": true,
+            "labelHint": "Withdraw Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Check Balances",
+            "enabled": true,
+            "labelHint": "Check Balances",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "link",
+            "name": "Make Deposits",
+            "enabled": true,
+            "labelHint": "Make Deposits",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "link",
+            "name": "Account History",
+            "enabled": true,
+            "labelHint": "Account History",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Read More",
+            "enabled": true,
+            "labelHint": "Read More",
+            "cssPath": "div#rightPanel > p:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "ParaBank Is Now Re-Opened",
+            "enabled": true,
+            "labelHint": "ParaBank Is Now Re-Opened",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "New! Online Bill Pay",
+            "enabled": true,
+            "labelHint": "New! Online Bill Pay",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "New! Online Account Transfers",
+            "enabled": true,
+            "labelHint": "New! Online Account Transfers",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Read More",
+            "enabled": true,
+            "labelHint": "Read More",
+            "cssPath": "div#rightPanel > p:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e31",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e32",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e33",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e34",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e35",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\nCustomer Login\n\nUsername\n\nPassword\n\nForgot login info?\n\nRegister\n\n \nATM Services\nWithdraw Funds\nTransfer Funds\nCheck Balances\nMake Deposits\nOnline Services\nBill Pay\nAccount History\nTransfer Funds\n\nREAD MORE\n\nLATEST NEWS\n09/10/2026\nParaBank Is Now Re-Opened\nNew! Online Bill Pay\nNew! Online Account Transfers\n\nREAD MORE\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "extracts": []
+    },
+    {
+      "seq": 2,
+      "intent": "enter the online banking password",
+      "tool": "fill",
+      "targetRef": "e11",
+      "value": {
+        "secretRef": "«redacted»"
+      },
+      "before": {
+        "url": "https://parabank.parasoft.com/parabank/index.htm",
+        "title": "ParaBank | Welcome | Online Banking",
+        "ariaHash": "c2a8308a7eb3ff9672514555a2a635f1ac7d0542",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Customer Login",
+            "enabled": true,
+            "labelHint": "Customer Login Username Password Forgot login info? Register",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "textbox",
+            "name": "",
+            "value": "«redacted»",
+            "enabled": true,
+            "labelHint": "username",
+            "cssPath": "div#loginPanel > form > div:nth-of-type(1) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "textbox",
+            "name": "",
+            "value": "",
+            "enabled": true,
+            "labelHint": "password",
+            "cssPath": "div#loginPanel > form > div:nth-of-type(2) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "button",
+            "name": "Log In",
+            "value": "Log In",
+            "enabled": true,
+            "cssPath": "div#loginPanel > form > div:nth-of-type(3) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Forgot login info?",
+            "enabled": true,
+            "labelHint": "Forgot login info?",
+            "cssPath": "div#loginPanel > p:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Register",
+            "enabled": true,
+            "labelHint": "Register",
+            "cssPath": "div#loginPanel > p:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Withdraw Funds",
+            "enabled": true,
+            "labelHint": "Withdraw Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Check Balances",
+            "enabled": true,
+            "labelHint": "Check Balances",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "link",
+            "name": "Make Deposits",
+            "enabled": true,
+            "labelHint": "Make Deposits",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "link",
+            "name": "Account History",
+            "enabled": true,
+            "labelHint": "Account History",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Read More",
+            "enabled": true,
+            "labelHint": "Read More",
+            "cssPath": "div#rightPanel > p:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "ParaBank Is Now Re-Opened",
+            "enabled": true,
+            "labelHint": "ParaBank Is Now Re-Opened",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "New! Online Bill Pay",
+            "enabled": true,
+            "labelHint": "New! Online Bill Pay",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "New! Online Account Transfers",
+            "enabled": true,
+            "labelHint": "New! Online Account Transfers",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Read More",
+            "enabled": true,
+            "labelHint": "Read More",
+            "cssPath": "div#rightPanel > p:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e31",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e32",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e33",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e34",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e35",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\nCustomer Login\n\nUsername\n\nPassword\n\nForgot login info?\n\nRegister\n\n \nATM Services\nWithdraw Funds\nTransfer Funds\nCheck Balances\nMake Deposits\nOnline Services\nBill Pay\nAccount History\nTransfer Funds\n\nREAD MORE\n\nLATEST NEWS\n09/10/2026\nParaBank Is Now Re-Opened\nNew! Online Bill Pay\nNew! Online Account Transfers\n\nREAD MORE\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "after": {
+        "url": "https://parabank.parasoft.com/parabank/index.htm",
+        "title": "ParaBank | Welcome | Online Banking",
+        "ariaHash": "c2a8308a7eb3ff9672514555a2a635f1ac7d0542",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Customer Login",
+            "enabled": true,
+            "labelHint": "Customer Login Username Password Forgot login info? Register",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "textbox",
+            "name": "",
+            "value": "«redacted»",
+            "enabled": true,
+            "labelHint": "username",
+            "cssPath": "div#loginPanel > form > div:nth-of-type(1) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "textbox",
+            "name": "",
+            "value": "«redacted»",
+            "enabled": true,
+            "labelHint": "password",
+            "cssPath": "div#loginPanel > form > div:nth-of-type(2) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "button",
+            "name": "Log In",
+            "value": "Log In",
+            "enabled": true,
+            "cssPath": "div#loginPanel > form > div:nth-of-type(3) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Forgot login info?",
+            "enabled": true,
+            "labelHint": "Forgot login info?",
+            "cssPath": "div#loginPanel > p:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Register",
+            "enabled": true,
+            "labelHint": "Register",
+            "cssPath": "div#loginPanel > p:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Withdraw Funds",
+            "enabled": true,
+            "labelHint": "Withdraw Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Check Balances",
+            "enabled": true,
+            "labelHint": "Check Balances",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "link",
+            "name": "Make Deposits",
+            "enabled": true,
+            "labelHint": "Make Deposits",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "link",
+            "name": "Account History",
+            "enabled": true,
+            "labelHint": "Account History",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Read More",
+            "enabled": true,
+            "labelHint": "Read More",
+            "cssPath": "div#rightPanel > p:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "ParaBank Is Now Re-Opened",
+            "enabled": true,
+            "labelHint": "ParaBank Is Now Re-Opened",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "New! Online Bill Pay",
+            "enabled": true,
+            "labelHint": "New! Online Bill Pay",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "New! Online Account Transfers",
+            "enabled": true,
+            "labelHint": "New! Online Account Transfers",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Read More",
+            "enabled": true,
+            "labelHint": "Read More",
+            "cssPath": "div#rightPanel > p:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e31",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e32",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e33",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e34",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e35",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\nCustomer Login\n\nUsername\n\nPassword\n\nForgot login info?\n\nRegister\n\n \nATM Services\nWithdraw Funds\nTransfer Funds\nCheck Balances\nMake Deposits\nOnline Services\nBill Pay\nAccount History\nTransfer Funds\n\nREAD MORE\n\nLATEST NEWS\n09/10/2026\nParaBank Is Now Re-Opened\nNew! Online Bill Pay\nNew! Online Account Transfers\n\nREAD MORE\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "extracts": []
+    },
+    {
+      "seq": 3,
+      "intent": "submit the login form",
+      "tool": "click",
+      "targetRef": "e12",
+      "before": {
+        "url": "https://parabank.parasoft.com/parabank/index.htm",
+        "title": "ParaBank | Welcome | Online Banking",
+        "ariaHash": "c2a8308a7eb3ff9672514555a2a635f1ac7d0542",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Customer Login",
+            "enabled": true,
+            "labelHint": "Customer Login Username Password Forgot login info? Register",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "textbox",
+            "name": "",
+            "value": "«redacted»",
+            "enabled": true,
+            "labelHint": "username",
+            "cssPath": "div#loginPanel > form > div:nth-of-type(1) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "textbox",
+            "name": "",
+            "value": "«redacted»",
+            "enabled": true,
+            "labelHint": "password",
+            "cssPath": "div#loginPanel > form > div:nth-of-type(2) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "button",
+            "name": "Log In",
+            "value": "Log In",
+            "enabled": true,
+            "cssPath": "div#loginPanel > form > div:nth-of-type(3) > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Forgot login info?",
+            "enabled": true,
+            "labelHint": "Forgot login info?",
+            "cssPath": "div#loginPanel > p:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Register",
+            "enabled": true,
+            "labelHint": "Register",
+            "cssPath": "div#loginPanel > p:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Withdraw Funds",
+            "enabled": true,
+            "labelHint": "Withdraw Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Check Balances",
+            "enabled": true,
+            "labelHint": "Check Balances",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "link",
+            "name": "Make Deposits",
+            "enabled": true,
+            "labelHint": "Make Deposits",
+            "cssPath": "div#rightPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "link",
+            "name": "Account History",
+            "enabled": true,
+            "labelHint": "Account History",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#rightPanel > ul:nth-of-type(2) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Read More",
+            "enabled": true,
+            "labelHint": "Read More",
+            "cssPath": "div#rightPanel > p:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "ParaBank Is Now Re-Opened",
+            "enabled": true,
+            "labelHint": "ParaBank Is Now Re-Opened",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "New! Online Bill Pay",
+            "enabled": true,
+            "labelHint": "New! Online Bill Pay",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "New! Online Account Transfers",
+            "enabled": true,
+            "labelHint": "New! Online Account Transfers",
+            "cssPath": "div#rightPanel > ul:nth-of-type(3) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Read More",
+            "enabled": true,
+            "labelHint": "Read More",
+            "cssPath": "div#rightPanel > p:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e31",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e32",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e33",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e34",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e35",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\nCustomer Login\n\nUsername\n\nPassword\n\nForgot login info?\n\nRegister\n\n \nATM Services\nWithdraw Funds\nTransfer Funds\nCheck Balances\nMake Deposits\nOnline Services\nBill Pay\nAccount History\nTransfer Funds\n\nREAD MORE\n\nLATEST NEWS\n09/10/2026\nParaBank Is Now Re-Opened\nNew! Online Bill Pay\nNew! Online Account Transfers\n\nREAD MORE\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "after": {
+        "url": "https://parabank.parasoft.com/parabank/overview.htm",
+        "title": "ParaBank | Accounts Overview",
+        "ariaHash": "9d375af5a127c5cd4745d7dffd39f10283f88dfe",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Account Services",
+            "enabled": true,
+            "labelHint": "Welcome david david",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "link",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "link",
+            "name": "Accounts Overview",
+            "enabled": true,
+            "labelHint": "Accounts Overview",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Find Transactions",
+            "enabled": true,
+            "labelHint": "Find Transactions",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Update Contact Info",
+            "enabled": true,
+            "labelHint": "Update Contact Info",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Request Loan",
+            "enabled": true,
+            "labelHint": "Request Loan",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Log Out",
+            "enabled": true,
+            "labelHint": "Log Out",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "heading",
+            "name": "Accounts Overview",
+            "enabled": true,
+            "labelHint": "Accounts Overview Account Balance* Available Amount 16785$515.50$515.50Total$515.50 *Balance includes deposits that may ",
+            "cssPath": "div#showOverview > h1",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "link",
+            "name": "16785",
+            "enabled": true,
+            "labelHint": "16785",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(1) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome david david\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nAccounts Overview\nAccount\tBalance*\tAvailable Amount\n16785\t$515.50\t$515.50\nTotal\t$515.50\t \n*Balance includes deposits that may be subject to holds\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "extracts": [],
+      "checkpoint": {
+        "textPresent": "Accounts Overview",
+        "urlMatches": "/parabank/overview\\.htm"
+      }
+    },
+    {
+      "seq": 4,
+      "intent": "go to the Open New Account page",
+      "tool": "click",
+      "targetRef": "e10",
+      "before": {
+        "url": "https://parabank.parasoft.com/parabank/overview.htm",
+        "title": "ParaBank | Accounts Overview",
+        "ariaHash": "9d375af5a127c5cd4745d7dffd39f10283f88dfe",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Account Services",
+            "enabled": true,
+            "labelHint": "Welcome david david",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "link",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "link",
+            "name": "Accounts Overview",
+            "enabled": true,
+            "labelHint": "Accounts Overview",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Find Transactions",
+            "enabled": true,
+            "labelHint": "Find Transactions",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Update Contact Info",
+            "enabled": true,
+            "labelHint": "Update Contact Info",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Request Loan",
+            "enabled": true,
+            "labelHint": "Request Loan",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Log Out",
+            "enabled": true,
+            "labelHint": "Log Out",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "heading",
+            "name": "Accounts Overview",
+            "enabled": true,
+            "labelHint": "Accounts Overview Account Balance* Available Amount 16785$515.50$515.50Total$515.50 *Balance includes deposits that may ",
+            "cssPath": "div#showOverview > h1",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "link",
+            "name": "16785",
+            "enabled": true,
+            "labelHint": "16785",
+            "cssPath": "table#accountTable > tbody > tr:nth-of-type(1) > td:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome david david\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nAccounts Overview\nAccount\tBalance*\tAvailable Amount\n16785\t$515.50\t$515.50\nTotal\t$515.50\t \n*Balance includes deposits that may be subject to holds\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "after": {
+        "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
+        "title": "ParaBank | Open Account",
+        "ariaHash": "448df19175025a730f61b2f3ee31a4f18373f1f1",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Account Services",
+            "enabled": true,
+            "labelHint": "Welcome david david",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "link",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "link",
+            "name": "Accounts Overview",
+            "enabled": true,
+            "labelHint": "Accounts Overview",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Find Transactions",
+            "enabled": true,
+            "labelHint": "Find Transactions",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Update Contact Info",
+            "enabled": true,
+            "labelHint": "Update Contact Info",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Request Loan",
+            "enabled": true,
+            "labelHint": "Request Loan",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Log Out",
+            "enabled": true,
+            "labelHint": "Log Out",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "heading",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $90.00 must be deposited int",
+            "cssPath": "div#openAccountForm > h1",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "combobox",
+            "name": "",
+            "value": "0",
+            "enabled": true,
+            "labelHint": "What type of Account would you like to open?",
+            "cssPath": "select#type",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "combobox",
+            "name": "",
+            "value": "16785",
+            "enabled": true,
+            "labelHint": "A minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
+            "cssPath": "select#fromAccountId",
+            "siblingIndex": 5,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "button",
+            "name": "Open New Account",
+            "value": "Open New Account",
+            "enabled": true,
+            "cssPath": "div#openAccountForm > form > div > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome david david\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n16785\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "extracts": []
+    },
+    {
+      "seq": 5,
+      "intent": "choose SAVINGS as the new account type",
+      "tool": "select",
+      "targetRef": "e19",
+      "value": {
+        "literal": "SAVINGS"
+      },
+      "before": {
+        "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
+        "title": "ParaBank | Open Account",
+        "ariaHash": "448df19175025a730f61b2f3ee31a4f18373f1f1",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Account Services",
+            "enabled": true,
+            "labelHint": "Welcome david david",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "link",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "link",
+            "name": "Accounts Overview",
+            "enabled": true,
+            "labelHint": "Accounts Overview",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Find Transactions",
+            "enabled": true,
+            "labelHint": "Find Transactions",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Update Contact Info",
+            "enabled": true,
+            "labelHint": "Update Contact Info",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Request Loan",
+            "enabled": true,
+            "labelHint": "Request Loan",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Log Out",
+            "enabled": true,
+            "labelHint": "Log Out",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "heading",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $90.00 must be deposited int",
+            "cssPath": "div#openAccountForm > h1",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "combobox",
+            "name": "",
+            "value": "0",
+            "enabled": true,
+            "labelHint": "What type of Account would you like to open?",
+            "cssPath": "select#type",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "combobox",
+            "name": "",
+            "value": "16785",
+            "enabled": true,
+            "labelHint": "A minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
+            "cssPath": "select#fromAccountId",
+            "siblingIndex": 5,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "button",
+            "name": "Open New Account",
+            "value": "Open New Account",
+            "enabled": true,
+            "cssPath": "div#openAccountForm > form > div > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome david david\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n16785\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "after": {
+        "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
+        "title": "ParaBank | Open Account",
+        "ariaHash": "448df19175025a730f61b2f3ee31a4f18373f1f1",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Account Services",
+            "enabled": true,
+            "labelHint": "Welcome david david",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "link",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "link",
+            "name": "Accounts Overview",
+            "enabled": true,
+            "labelHint": "Accounts Overview",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Find Transactions",
+            "enabled": true,
+            "labelHint": "Find Transactions",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Update Contact Info",
+            "enabled": true,
+            "labelHint": "Update Contact Info",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Request Loan",
+            "enabled": true,
+            "labelHint": "Request Loan",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Log Out",
+            "enabled": true,
+            "labelHint": "Log Out",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "heading",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $90.00 must be deposited int",
+            "cssPath": "div#openAccountForm > h1",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "combobox",
+            "name": "",
+            "value": "1",
+            "enabled": true,
+            "labelHint": "What type of Account would you like to open?",
+            "cssPath": "select#type",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "combobox",
+            "name": "",
+            "value": "16785",
+            "enabled": true,
+            "labelHint": "A minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
+            "cssPath": "select#fromAccountId",
+            "siblingIndex": 5,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "button",
+            "name": "Open New Account",
+            "value": "Open New Account",
+            "enabled": true,
+            "cssPath": "div#openAccountForm > form > div > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome david david\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n16785\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "extracts": [],
+      "checkpoint": {
+        "textPresent": "A minimum of $90.00 must be deposited",
+        "urlMatches": "/parabank/openaccount\\.htm"
+      }
+    },
+    {
+      "seq": 6,
+      "intent": "submit the request to open a new SAVINGS account (transfers the minimum deposit from the existing account)",
+      "tool": "click",
+      "targetRef": "e21",
+      "before": {
+        "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
+        "title": "ParaBank | Open Account",
+        "ariaHash": "448df19175025a730f61b2f3ee31a4f18373f1f1",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Account Services",
+            "enabled": true,
+            "labelHint": "Welcome david david",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "link",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "link",
+            "name": "Accounts Overview",
+            "enabled": true,
+            "labelHint": "Accounts Overview",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Find Transactions",
+            "enabled": true,
+            "labelHint": "Find Transactions",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Update Contact Info",
+            "enabled": true,
+            "labelHint": "Update Contact Info",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Request Loan",
+            "enabled": true,
+            "labelHint": "Request Loan",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Log Out",
+            "enabled": true,
+            "labelHint": "Log Out",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "heading",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account What type of Account would you like to open? CHECKING SAVINGS A minimum of $90.00 must be deposited int",
+            "cssPath": "div#openAccountForm > h1",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "combobox",
+            "name": "",
+            "value": "1",
+            "enabled": true,
+            "labelHint": "What type of Account would you like to open?",
+            "cssPath": "select#type",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "combobox",
+            "name": "",
+            "value": "16785",
+            "enabled": true,
+            "labelHint": "A minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.",
+            "cssPath": "select#fromAccountId",
+            "siblingIndex": 5,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "button",
+            "name": "Open New Account",
+            "value": "Open New Account",
+            "enabled": true,
+            "cssPath": "div#openAccountForm > form > div > input",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e29",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e30",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome david david\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nOpen New Account\n\nWhat type of Account would you like to open?\n\nCHECKING\nSAVINGS\n\n\n\n\nA minimum of $90.00 must be deposited into this account at time of opening. Please choose an existing account to transfer funds into the new account.\n\n16785\n\n\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "after": {
+        "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
+        "title": "ParaBank | Open Account",
+        "ariaHash": "5547a25b85ab69a914a836b8da86979efc1363d2",
+        "nodes": [
+          {
+            "ref": "e1",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e2",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e3",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e4",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e5",
+            "role": "link",
+            "name": "Admin Page",
+            "enabled": true,
+            "labelHint": "Admin Page",
+            "cssPath": "div#headerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e6",
+            "role": "link",
+            "name": "home",
+            "enabled": true,
+            "labelHint": "home",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e7",
+            "role": "link",
+            "name": "about",
+            "enabled": true,
+            "labelHint": "about",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e8",
+            "role": "link",
+            "name": "contact",
+            "enabled": true,
+            "labelHint": "contact",
+            "cssPath": "div#headerPanel > ul:nth-of-type(2) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e9",
+            "role": "heading",
+            "name": "Account Services",
+            "enabled": true,
+            "labelHint": "Welcome david david",
+            "cssPath": "div#leftPanel > h2",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e10",
+            "role": "link",
+            "name": "Open New Account",
+            "enabled": true,
+            "labelHint": "Open New Account",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e11",
+            "role": "link",
+            "name": "Accounts Overview",
+            "enabled": true,
+            "labelHint": "Accounts Overview",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e12",
+            "role": "link",
+            "name": "Transfer Funds",
+            "enabled": true,
+            "labelHint": "Transfer Funds",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e13",
+            "role": "link",
+            "name": "Bill Pay",
+            "enabled": true,
+            "labelHint": "Bill Pay",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e14",
+            "role": "link",
+            "name": "Find Transactions",
+            "enabled": true,
+            "labelHint": "Find Transactions",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e15",
+            "role": "link",
+            "name": "Update Contact Info",
+            "enabled": true,
+            "labelHint": "Update Contact Info",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e16",
+            "role": "link",
+            "name": "Request Loan",
+            "enabled": true,
+            "labelHint": "Request Loan",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e17",
+            "role": "link",
+            "name": "Log Out",
+            "enabled": true,
+            "labelHint": "Log Out",
+            "cssPath": "div#leftPanel > ul > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e18",
+            "role": "heading",
+            "name": "Account Opened!",
+            "enabled": true,
+            "labelHint": "Account Opened! Congratulations, your account is now open. Your new account number: 21558",
+            "cssPath": "div#openAccountResult > h1",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e19",
+            "role": "link",
+            "name": "21558",
+            "enabled": true,
+            "labelHint": "Your new account number",
+            "cssPath": "a#newAccountId",
+            "siblingIndex": 1,
+            "framePath": []
+          },
+          {
+            "ref": "e20",
+            "role": "link",
+            "name": "Home",
+            "enabled": true,
+            "labelHint": "Home|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(1) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e21",
+            "role": "link",
+            "name": "About Us",
+            "enabled": true,
+            "labelHint": "About Us|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e22",
+            "role": "link",
+            "name": "Services",
+            "enabled": true,
+            "labelHint": "Services|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(3) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e23",
+            "role": "link",
+            "name": "Products",
+            "enabled": true,
+            "labelHint": "Products|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(4) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e24",
+            "role": "link",
+            "name": "Locations",
+            "enabled": true,
+            "labelHint": "Locations|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(5) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e25",
+            "role": "link",
+            "name": "Forum",
+            "enabled": true,
+            "labelHint": "Forum|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(6) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e26",
+            "role": "link",
+            "name": "Site Map",
+            "enabled": true,
+            "labelHint": "Site Map|",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(7) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e27",
+            "role": "link",
+            "name": "Contact Us",
+            "enabled": true,
+            "labelHint": "Contact Us",
+            "cssPath": "div#footerPanel > ul:nth-of-type(1) > li:nth-of-type(8) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          },
+          {
+            "ref": "e28",
+            "role": "link",
+            "name": "www.parasoft.com",
+            "enabled": true,
+            "labelHint": "www.parasoft.com",
+            "cssPath": "div#footerPanel > ul:nth-of-type(2) > li:nth-of-type(2) > a",
+            "siblingIndex": 0,
+            "framePath": []
+          }
+        ],
+        "text": "Experience the difference\n\nSolutions\nAbout Us\nServices\nProducts\nLocations\nAdmin Page\nhome\nabout\ncontact\n\nWelcome david david\n\nAccount Services\nOpen New Account\nAccounts Overview\nTransfer Funds\nBill Pay\nFind Transactions\nUpdate Contact Info\nRequest Loan\nLog Out\nAccount Opened!\n\nCongratulations, your account is now open.\n\nYour new account number: 21558\n\nHome|\nAbout Us|\nServices|\nProducts|\nLocations|\nForum|\nSite Map|\nContact Us\n\n© Parasoft. All rights reserved.\n\nVisit us at:\nwww.parasoft.com"
+      },
+      "extracts": [
+        {
+          "name": "newAccountNumber",
+          "ref": "e19",
+          "as": "string",
+          "description": "The account number of the newly opened SAVINGS account.",
+          "pattern": "(\\d{3,})"
+        }
+      ],
+      "riskHint": "irreversible",
+      "checkpoint": {
+        "textPresent": "Congratulations, your account is now open."
+      }
+    }
+  ],
+  "outcomes": [
+    {
+      "name": "LOGIN_REJECTED",
+      "description": "The supplied username/password were not accepted, so no account can be opened.",
+      "detect": {
+        "textPresent": "The username and password could not be verified."
+      },
+      "terminal": true
+    },
+    {
+      "name": "ACCOUNT_NOT_OPENED",
+      "description": "The open-account request was submitted but the bank did not create an account (e.g. the funding account cannot cover the minimum opening deposit); the form is still shown and no confirmation number is issued.",
+      "detect": {
+        "textPresent": "What type of Account would you like to open?",
+        "textAbsent": "Congratulations, your account is now open."
+      },
+      "terminal": true
+    }
+  ],
+  "escalations": [],
+  "stoppedBecause": "finished",
+  "finish": {
+    "name": "Open ParaBank SAVINGS Account",
+    "description": "Logs into ParaBank online banking with vault credentials (PARABANK_USERNAME / PARABANK_PASSWORD), opens a new SAVINGS account funded by the customer's default existing account (the minimum opening deposit is transferred from it), and returns `newAccountNumber` from the \"Account Opened!\" confirmation page. Because opening an account and moving the opening deposit cannot be undone, the submit step is marked irreversible and requires human approval on each replay. Business outcomes: LOGIN_REJECTED (credentials not verified) and ACCOUNT_NOT_OPENED (form re-shown with no confirmation, e.g. minimum deposit not covered).",
+    "summary": "Logged in as the ParaBank customer, navigated to Open New Account, selected account type SAVINGS, left the pre-selected existing account as the funding source (only one available), submitted the request (marked irreversible), verified the \"Congratulations, your account is now open.\" confirmation and extracted the new account number (21558 in this run). Declared LOGIN_REJECTED and ACCOUNT_NOT_OPENED outcomes plus checkpoints on each step."
+  },
+  "finishedAt": "2026-09-10T22:30:34.574Z"
+}
