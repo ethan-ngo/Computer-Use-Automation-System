@@ -9,7 +9,13 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { buildLocator, canonicaliseUrl, recordArtifact, RecorderError } from '../src/artifact/recorder.js';
+import {
+  buildLocator,
+  canonicaliseUrl,
+  recordArtifact,
+  RecorderError,
+  unverifiedOutcomes,
+} from '../src/artifact/recorder.js';
 import { parseArtifact } from '../src/artifact/store.js';
 import { loadPolicy } from '../src/policy/policy.js';
 import { resolveLocator } from '../src/replay/locator.js';
@@ -374,6 +380,49 @@ describe('recording an artifact', () => {
         { policy, evidenceRef: 'e' },
       ),
     ).rejects.toThrow(/claimed success the evidence does not support/);
+  });
+
+  it('flags an outcome detector whose wording the run never observed', () => {
+    // The asymmetry with checkpoints is deliberate. A checkpoint describes a page the run
+    // visited, so a contradiction is a lie and the artifact is rejected. An outcome
+    // usually describes a page the run did NOT visit, so the model must infer the
+    // wording — absence of evidence is not contradiction, and refusing to record it would
+    // throw away the most valuable thing discovery produces. So: record, and flag.
+    //
+    // The cost of not flagging, measured live: the model guessed ParaBank says "The
+    // username and password could not be verified."; it actually says "An internal error
+    // has occurred and has been logged." A real login rejection escalated to a human as
+    // CHECKPOINT_FAILED after 16s. With the detector corrected, the same run returns
+    // LOGIN_REJECTED in 1.4s.
+    const observed = snap([loginButton], { text: 'Please log in. An internal error has occurred.' });
+
+    const flagged = unverifiedOutcomes(
+      log({
+        actions: [action({ intent: 'log in', tool: 'click', targetRef: 'e3', before: loginPage, after: observed })],
+        outcomes: [
+          {
+            name: 'GUESSED',
+            description: 'wording the model inferred but never saw',
+            detect: { textPresent: 'The username and password could not be verified.' },
+            terminal: true,
+          },
+          {
+            name: 'OBSERVED',
+            description: 'wording that really is on a page this run saw',
+            detect: { textPresent: 'An internal error has occurred' },
+            terminal: true,
+          },
+          {
+            name: 'STRUCTURAL',
+            description: 'a url-only detector makes no claim about wording',
+            detect: { urlMatches: '/parabank/login\.htm' },
+            terminal: true,
+          },
+        ],
+      }),
+    );
+
+    expect(flagged).toEqual(['GUESSED']);
   });
 
   it('gives colliding intents distinct, stable step ids', async () => {

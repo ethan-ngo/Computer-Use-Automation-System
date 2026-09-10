@@ -17,6 +17,13 @@ import type { Policy } from './policy.js';
 
 export const REDACTED = '«redacted»';
 
+/**
+ * Keys whose values are *names of* secrets rather than secrets. These must survive
+ * redaction: an artifact that has lost its secret references cannot resolve a credential
+ * at all, which turns a privacy control into a correctness bug.
+ */
+const REFERENCE_KEYS = new Set(['secretRef', 'secretRefs', 'valueFrom']);
+
 export class Redactor {
   /** Literal secret values, longest first so overlapping secrets redact completely. */
   private readonly secrets: string[] = [];
@@ -65,11 +72,29 @@ export class Redactor {
       for (const [k, v] of Object.entries(input as Record<string, unknown>)) {
         // A key that names a secret gets its value dropped regardless of shape — belt and
         // braces for values we never learned.
-        out[k] = /password|secret|token|apikey|api_key/i.test(k) ? REDACTED : this.value(v);
+        out[k] = this.blanksByKey(k) ? REDACTED : this.value(v);
       }
       return out as T;
     }
     return input;
+  }
+
+  /**
+   * Whether a key's value should be blanked on the strength of its name alone.
+   *
+   * `secretRef` is the exception that has to be carved out, and getting it wrong broke a
+   * real artifact: the key matches `/secret/i`, so a discovery log written through
+   * `value()` had every `{ secretRef: "PARABANK_PASSWORD" }` reduced to
+   * `{ secretRef: "«redacted»" }`. Re-recording from that log produced a capability whose
+   * credentials could never resolve — and it failed at replay time, far from the cause.
+   *
+   * A secret *reference* is a name, not a value. The whole "references, not literals"
+   * decision exists so that names are safe to persist and share; redacting them defeats
+   * the mechanism it was trying to protect.
+   */
+  private blanksByKey(key: string): boolean {
+    if (REFERENCE_KEYS.has(key)) return false;
+    return /password|secret|token|apikey|api_key/i.test(key);
   }
 
   get maskSelectors(): string[] {

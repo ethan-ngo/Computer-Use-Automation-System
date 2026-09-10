@@ -3,10 +3,10 @@
 Execution tracker for `docs/PLAN.md`. Check items off as they complete.
 Resume rule: find the first unchecked box, do that.
 
-**State as of last session:** M0-M8 complete — 128 tests green, typecheck clean.
-The live discovery run **works end to end** against ParaBank and produced
-`capabilities/parabank.open-parabank-savings-account.json`. Next code action is M9
-(evidence capture) then M10/M11.
+**State as of last session:** M0-M8 complete plus `src/cli/replay.ts` — 130 tests green,
+typecheck clean. **Discover → record → replay is verified end to end against live
+ParaBank**, in all three terminal states: success, business outcome, and escalation.
+Next code action is M9 (evidence capture), then M10/M11.
 
 **Environment notes**
 - Node v23.7.0, npm 11.6.2, git 2.39.2 — all present.
@@ -99,8 +99,20 @@ The live discovery run **works end to end** against ParaBank and produced
 - [x] `--from-run <runId>` re-compiles the artifact from a saved discovery log. Every real
       run opens an actual account on a public demo, so iterating on the recorder must not
       require iterating on the bank.
-- [ ] Verify the recorded artifact replays *(needs `src/cli/replay.ts`, which does not exist
-      yet even though `package.json` has the script — M11)*
+- [x] **Verified the recorded artifact replays.** `src/cli/replay.ts` written (out of M11
+      order, because "does the artifact actually work" is the question the whole design
+      answers). `npm run replay -- --capability parabank.open-savings-account --approve auto`:
+      all six steps `ok`, every locator resolved on its **primary** strategy — zero drift —
+      and it read back a real new account number. No model in the loop.
+- [x] Verified the business-outcome path: the same artifact with a wrong password returns
+      `LOGIN_REJECTED` in **1.4s, exit code 0**. Before the detector was corrected the same
+      run escalated as `CHECKPOINT_FAILED` after 16s and paged a human. That pair is the
+      clearest measurement in the project of what declaring outcomes buys.
+
+**Replay exit codes.** `success` and `business_outcome` both exit 0; `escalated` exits 2;
+`failed` exits 1. A business outcome exiting 0 is the point — a scheduler that retries a
+loan denial, or a rota that pages someone for it, is the failure this design exists to
+prevent.
 
 **What the live runs actually taught us.** Four failures, all real, all now fixed and tested:
 
@@ -162,6 +174,28 @@ careful and is useless: the handoff itself moves the lease twice (take, release)
 pinned to the pre-handoff epoch is guaranteed stale and the check would have to be weakened
 to nothing. Pinned at the point of return it means something falsifiable — no *further*
 transfer happened between the operator handing the session back and automation picking it up.
+
+## Found while verifying replay
+
+- [x] **`Redactor.value()` destroyed secret references.** The key `secretRef` matches
+      `/secret/i`, so every `{ secretRef: "PARABANK_PASSWORD" }` in a discovery log became
+      `{ secretRef: "«redacted»" }`. Re-recording from that log produced a capability whose
+      credentials could never resolve, and it failed at replay time far from the cause. A
+      secret *reference* is a name, and the whole "references, not literals" decision exists
+      so names are safe to persist — redacting them defeated the mechanism they protect.
+      Fixed with a `REFERENCE_KEYS` allowlist; tested.
+- [x] **Outcome detectors cannot be verified from a happy-path discovery run**, and the
+      recorder was silent about it. `unverifiedOutcomes()` now flags any detector whose
+      `textPresent` wording appears nowhere in the run's observations, and the CLI says so.
+      Not a rejection: an outcome for a page the run never visited is legitimate and is the
+      most valuable thing the model produces. But it is inferred, and inferred wording is
+      exactly what turned a real login rejection back into a false alarm.
+- [x] The engine does not navigate to `target.entryPoint`; no step records it, because
+      discovery navigates there before the model sees the page. The replay CLI does it —
+      getting to the entry point is the harness's job, executing recorded steps is the
+      engine's.
+- [x] `--from-run` now honours `--id`, and discovery exits 2 with a loud warning when a run
+      ends as anything other than `finished`.
 
 ## M9 — Evidence
 

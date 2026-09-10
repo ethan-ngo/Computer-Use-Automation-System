@@ -1,0 +1,72 @@
+{
+  "kind": "success",
+  "runId": "9b9b3d06-ec91-48a9-8f1e-3ce55d15b1ef",
+  "capabilityId": "parabank.open-savings-account",
+  "capabilityVersion": "1.0.0",
+  "steps": [
+    {
+      "id": "step.enter-the-online-banking-username",
+      "index": 0,
+      "intent": "enter the online banking username",
+      "strategy": "label=\"username\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 334
+    },
+    {
+      "id": "step.enter-the-online-banking-password",
+      "index": 1,
+      "intent": "enter the online banking password",
+      "strategy": "label=\"password\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 294
+    },
+    {
+      "id": "step.submit-the-login-form",
+      "index": 2,
+      "intent": "submit the login form",
+      "strategy": "role=button name=\"Log In\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 848
+    },
+    {
+      "id": "step.go-to-the-open-new-account-form",
+      "index": 3,
+      "intent": "go to the Open New Account form",
+      "strategy": "role=link name=\"Open New Account\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 682
+    },
+    {
+      "id": "step.choose-savings-as-the-new-account-type",
+      "index": 4,
+      "intent": "choose SAVINGS as the new account type",
+      "strategy": "label=\"What type of Account would you like to open?\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 30336
+    },
+    {
+      "id": "step.submit-the-application-to-open-a-new-savings-acc",
+      "index": 5,
+      "intent": "submit the application to open a new SAVINGS account funded from the default account",
+      "strategy": "role=button name=\"Open New Account\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 633
+    }
+  ],
+  "outputs": {
+    "newAccountNumber": "13677"
+  },
+  "durationMs": 33153
+}

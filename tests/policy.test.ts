@@ -135,3 +135,28 @@ describe('budgets', () => {
     expect(policy.budgets.minDelayBetweenActionsMs).toBeGreaterThan(0);
   });
 });
+
+describe('redaction preserves references', () => {
+  it('keeps a secretRef intact while still blanking a secret value', () => {
+    // The bug this is written from: `secretRef` matches /secret/i, so the key-based
+    // blanking reduced { secretRef: "PARABANK_PASSWORD" } to { secretRef: "«redacted»" }
+    // in the discovery log. Re-recording from that log produced a capability whose
+    // credentials could never resolve, and it failed at replay time — far from the cause.
+    const redactor = new Redactor(loadPolicy()).learn('hunter2-actual-password');
+
+    const out = redactor.value({
+      action: { type: 'fill', value: { secretRef: 'PARABANK_PASSWORD' } },
+      reference: { valueFrom: '$.inputs.accountType' },
+      password: 'hunter2-actual-password',
+      note: 'logged in with hunter2-actual-password',
+    });
+
+    // The reference survives — it is a name, and the whole design depends on names being
+    // safe to persist.
+    expect(out.action.value.secretRef).toBe('PARABANK_PASSWORD');
+    expect(out.reference.valueFrom).toBe('$.inputs.accountType');
+    // The actual secret does not, whether it is under a telling key or buried in prose.
+    expect(out.password).toBe(REDACTED);
+    expect(out.note).not.toContain('hunter2');
+  });
+});

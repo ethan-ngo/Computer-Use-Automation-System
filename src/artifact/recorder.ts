@@ -466,6 +466,40 @@ export async function verifyCheckpoints(log: DiscoveryLog): Promise<string[]> {
   return contradictions;
 }
 
+/**
+ * Names the outcome detectors that cannot be verified from this run's evidence.
+ *
+ * The asymmetry with checkpoints is the whole point, and it is not a weakness in the
+ * detectors — it is a fact about discovery. A checkpoint describes a page the run *did*
+ * visit, so if the observation contradicts it the model is claiming something false and
+ * the artifact is rejected. An outcome usually describes a page the run *did not* visit:
+ * a happy-path discovery never sees "insufficient funds", so the model necessarily infers
+ * the wording. Absence of evidence is not contradiction, and refusing to record a
+ * declared outcome would throw away the most valuable thing the model produces.
+ *
+ * So it is recorded, and flagged. The cost of not flagging it is concrete: this run
+ * declared `LOGIN_REJECTED` as "The username and password could not be verified." and
+ * ParaBank actually says "An internal error has occurred and has been logged." — so a
+ * genuine login rejection escalated to a human as CHECKPOINT_FAILED, which is precisely
+ * the false alarm the outcome mechanism exists to prevent.
+ */
+export function unverifiedOutcomes(log: DiscoveryLog): string[] {
+  const seen = log.actions
+    .flatMap((a) => [a.before.text, a.after.text])
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .toLowerCase();
+
+  const unverified: string[] = [];
+  for (const outcome of log.outcomes) {
+    const needle = outcome.detect.textPresent?.replace(/\s+/g, ' ').trim().toLowerCase();
+    // Only a `textPresent` detector is checkable this way. A url-only detector is
+    // structural and not a claim about wording, so it is not flagged.
+    if (needle && !seen.includes(needle)) unverified.push(outcome.name);
+  }
+  return unverified;
+}
+
 export async function recordArtifact(
   log: DiscoveryLog,
   opts: RecordOptions,

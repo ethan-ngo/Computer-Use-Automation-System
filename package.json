@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "discover": "tsx --env-file-if-exists=.env src/cli/discover.ts",
-    "replay": "tsx src/cli/replay.ts",
+    "replay": "tsx --env-file-if-exists=.env src/cli/replay.ts",
     "operator": "tsx --env-file-if-exists=.env src/cli/operator.ts",
     "agent-demo": "tsx src/cli/agent-demo.ts",
     "catalog": "tsx src/cli/catalog.ts",
