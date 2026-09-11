@@ -43,5 +43,14 @@ export interface Surface {
   /** Resolve a css selector to normalized nodes; used by the `css`/`nth` strategies. */
   matchCss(selector: string): Promise<UiNode[]>;
 
+  /**
+   * Write an execution trace to `path`, returning false when this surface has none.
+   *
+   * Optional rather than required: a Playwright context records one, a Windows UIA adapter
+   * has nothing equivalent, and making every adapter implement a stub would turn a real
+   * capability difference into a silently empty file.
+   */
+  saveTrace?(path: string): Promise<boolean>;
+
   close(): Promise<void>;
 }

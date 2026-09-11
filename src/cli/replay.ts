@@ -28,6 +28,7 @@ import { Redactor } from '../policy/redact.js';
 import { LeaseManager } from '../escalation/lease.js';
 import { PlaywrightWebSurface } from '../surface/playwright-web.js';
 import { FileRunLogger } from '../evidence/logger.js';
+import { RunEvidence } from '../evidence/capture.js';
 import { loadResolved } from '../artifact/store.js';
 import { compileInputs } from '../artifact/params.js';
 import { replay, type ApprovalHook, type ReplayResult } from '../replay/engine.js';
@@ -112,7 +113,7 @@ async function main(): Promise<void> {
   const policy = loadPolicy();
   const redactor = new Redactor(policy).learnFromEnv();
   const logger = new FileRunLogger(runId, redactor);
-  const leases = new LeaseManager(runId);
+  const leases = new LeaseManager(runId).attachLogger(logger, runId);
 
   const capability = await loadResolved(capabilityId, tenantId);
   const { artifact } = capability;
@@ -139,7 +140,14 @@ async function main(): Promise<void> {
     leases,
     extraOrigins: [baseUrl],
     headless: has('headless'),
+    // A trace is only written if the run fails, but it has to be recorded from the start,
+    // so the decision is made before anything can go wrong.
+    trace: !has('no-trace'),
   });
+
+  // Per-step screenshots are the evidence a reviewer actually reads. `--no-screenshots`
+  // exists for the offline integration test, where two PNGs per step is just noise.
+  const evidence = new RunEvidence(surface, logger, runId, logger, !has('no-screenshots'));
 
   console.log(`run ${runId}`);
   console.log(`  capability: ${artifact.id}@${artifact.version} — ${artifact.name}`);
@@ -177,16 +185,22 @@ async function main(): Promise<void> {
       runId,
       logger,
       approve: approvalHook(flag('approve') ?? 'ask'),
+      capture: evidence,
     });
 
     report(result);
     logger.write('result.json', JSON.stringify(redactor.value(result), null, 2));
 
-    const evidence = await surface.capture();
-    logger.screenshot('final.png', evidence.screenshot);
+    const final = await surface.capture();
+    logger.screenshot('final.png', final.screenshot);
     if (result.kind === 'failed' || result.kind === 'escalated') {
-      logger.write('failure.html', evidence.html);
-      logger.write('failure.aria.yaml', evidence.aria);
+      // The whole bundle, including the trace, because this is the run someone will have
+      // to explain and the browser is about to close.
+      const files = await evidence.failure(`${result.kind} at ${result.atStepId}`);
+      if (files.length > 0) {
+        console.log(`
+  failure evidence: ${files.map((f) => f.split(/[\/]/).pop()).join(', ')}`);
+      }
     }
 
     process.exitCode = EXIT[result.kind];

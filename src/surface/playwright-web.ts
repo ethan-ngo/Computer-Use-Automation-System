@@ -174,6 +174,13 @@ export interface WebSurfaceOptions {
   headless?: boolean;
   /** Pacing between actions. Also ParaBank hygiene: it is somebody's public demo. */
   paceMs?: number;
+  /**
+   * Record a Playwright trace for the session, saved only if the run fails.
+   *
+   * Off by default: tracing carries every screenshot and network body in memory, and the
+   * cost is only worth paying on a run someone will have to explain afterwards.
+   */
+  trace?: boolean;
 }
 
 export class PlaywrightWebSurface implements Surface {
@@ -184,11 +191,19 @@ export class PlaywrightWebSurface implements Surface {
     private readonly opts: WebSurfaceOptions,
   ) {}
 
+  private traceSaved = false;
+
   static async launch(opts: WebSurfaceOptions): Promise<PlaywrightWebSurface> {
     // Headed and long-lived by default: a handoff must give the operator the *same*
     // session, not a fresh one. The context is never torn down across an intervention.
     const browser = await chromium.launch({ headless: opts.headless ?? false });
     const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+
+    if (opts.trace) {
+      // Snapshots and sources, because the question a trace has to answer after a
+      // LOCATOR_NOT_FOUND is "what did the page actually contain at that instant".
+      await context.tracing.start({ screenshots: true, snapshots: true, sources: false });
+    }
 
     // Denied capabilities, enforced at the browser rather than by asking nicely.
     await context.route('**/*', (route) => route.continue());
@@ -383,7 +398,20 @@ export class PlaywrightWebSurface implements Surface {
     return { screenshot, html, aria, url: this.page.url(), title: await this.page.title() };
   }
 
+  /**
+   * Stop tracing and write the zip. Returns false when tracing was never started, which is
+   * the honest answer rather than an empty archive.
+   */
+  async saveTrace(path: string): Promise<boolean> {
+    if (!this.opts.trace || this.traceSaved) return false;
+    this.traceSaved = true;
+    await this.context.tracing.stop({ path });
+    return true;
+  }
+
   async close(): Promise<void> {
+    // A trace left running holds the buffer open; stopping without a path discards it.
+    if (this.opts.trace && !this.traceSaved) await this.context.tracing.stop().catch(() => {});
     await this.context.close().catch(() => {});
     await this.browser.close().catch(() => {});
   }

@@ -16,6 +16,7 @@ import { Redactor } from '../policy/redact.js';
 import { LeaseManager } from '../escalation/lease.js';
 import { PlaywrightWebSurface } from '../surface/playwright-web.js';
 import { FileRunLogger } from '../evidence/logger.js';
+import { RunEvidence } from '../evidence/capture.js';
 import { loadResolved } from '../artifact/store.js';
 import { ReplayEngine, type ReplayResult } from '../replay/engine.js';
 import {
@@ -44,7 +45,9 @@ async function main(): Promise<void> {
   const policy = loadPolicy();
   const redactor = new Redactor(policy).learnFromEnv();
   const logger = new FileRunLogger(runId, redactor);
-  const leases = new LeaseManager(runId);
+  // The control-transfer timeline is the deliverable this CLI exists to produce, so the
+  // lease logs itself from the moment the session opens.
+  const leases = new LeaseManager(runId).attachLogger(logger, runId);
   const broker = new InterventionBroker({ logger, redactor, ttlMs: Number(arg('ttl', '900000')) });
 
   const capability = await loadResolved(capabilityId, tenantId);
@@ -58,6 +61,7 @@ async function main(): Promise<void> {
     // Headed by default. The whole point of a handoff is that the operator gets *this*
     // session, with its cookies and its half-filled form — not a fresh one.
     headless,
+    trace: true,
   });
 
   const ui = await startConsole({ broker, leases, surface, port: Number(arg('port', '8788')) });
@@ -67,6 +71,8 @@ async function main(): Promise<void> {
   console.log(`  tenant:     ${tenantId ?? '(none)'}`);
   console.log(`  console:    ${ui.url}`);
   console.log(`  logs:       ${relative(process.cwd(), logger.dir)}\n`);
+
+  const evidence = new RunEvidence(surface, logger, runId, logger);
 
   const inputs = Object.fromEntries(
     process.argv
@@ -89,6 +95,7 @@ async function main(): Promise<void> {
         baseUrl,
         runId,
         logger,
+        capture: evidence,
         completedSteps: [...completedSteps],
         ...(startAtStepId ? { startAtStepId } : {}),
         // The approval gate routes through the same broker as an error escalation, so an
@@ -123,6 +130,7 @@ async function main(): Promise<void> {
 
       if (result.kind !== 'escalated') {
         report(result, logger);
+        if (result.kind === 'failed') await evidence.failure(`failed at ${result.atStepId}`);
         return;
       }
 
