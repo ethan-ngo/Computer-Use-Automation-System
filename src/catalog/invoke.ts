@@ -150,7 +150,7 @@ export async function invoke(options: InvokeOptions): Promise<InvocationResult> 
       approve: options.approve ?? (() => false),
     });
 
-    logger.write('result.json', JSON.stringify(redactor.value(result), null, 2));
+    logger.writeJson('result.json', result);
     if (result.kind === 'failed' || result.kind === 'escalated') await evidence.failure(result.kind);
 
     const common = { capability: entry.capabilityId, runId, evidence: logger.dir };
