@@ -22,7 +22,7 @@
 
 import { randomUUID } from 'node:crypto';
 import { createInterface } from 'node:readline/promises';
-import { relative } from 'node:path';
+import { basename, relative } from 'node:path';
 import { loadPolicy } from '../policy/policy.js';
 import { Redactor } from '../policy/redact.js';
 import { LeaseManager } from '../escalation/lease.js';
@@ -140,9 +140,16 @@ async function main(): Promise<void> {
     leases,
     extraOrigins: [baseUrl],
     headless: has('headless'),
-    // A trace is only written if the run fails, but it has to be recorded from the start,
-    // so the decision is made before anything can go wrong.
-    trace: !has('no-trace'),
+    /*
+     * Opt-in, and it has to be decided before anything can go wrong because a trace is
+     * recorded from the start and only saved on failure.
+     *
+     * Off by default because a trace is the one artefact the redactor cannot reach:
+     * Playwright writes request bodies and typed values into it verbatim, so a trace over
+     * a login contains the password in clear text. Invaluable for diagnosis, never
+     * shippable — traces under `evidence/runs/` are gitignored for the same reason.
+     */
+    trace: has('trace'),
   });
 
   // Per-step screenshots are the evidence a reviewer actually reads. `--no-screenshots`
@@ -199,7 +206,7 @@ async function main(): Promise<void> {
       const files = await evidence.failure(`${result.kind} at ${result.atStepId}`);
       if (files.length > 0) {
         console.log(`
-  failure evidence: ${files.map((f) => f.split(/[\/]/).pop()).join(', ')}`);
+  failure evidence: ${files.map((f) => basename(f)).join(', ')}`);
       }
     }
 

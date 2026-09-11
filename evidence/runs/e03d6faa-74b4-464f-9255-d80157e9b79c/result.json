@@ -1,0 +1,46 @@
+{
+  "kind": "escalated",
+  "reason": "approval_required",
+  "atStepId": "step.go-to-the-open-new-account-form",
+  "intent": "go to the Open New Account form",
+  "expected": "human approval for irreversible step \"go to the Open New Account form\"",
+  "observed": "approval declined",
+  "url": "https://parabank.parasoft.com/parabank/overview.htm",
+  "runId": "e03d6faa-74b4-464f-9255-d80157e9b79c",
+  "capabilityId": "parabank.open-savings-account",
+  "capabilityVersion": "1.0.0",
+  "steps": [
+    {
+      "id": "step.enter-the-online-banking-username",
+      "index": 0,
+      "intent": "enter the online banking username",
+      "strategy": "label=\"username\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 528
+    },
+    {
+      "id": "step.enter-the-online-banking-password",
+      "index": 1,
+      "intent": "enter the online banking password",
+      "strategy": "label=\"password\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 455
+    },
+    {
+      "id": "step.submit-the-login-form",
+      "index": 2,
+      "intent": "submit the login form",
+      "strategy": "role=button name=\"Log In\"",
+      "degraded": false,
+      "status": "ok",
+      "attempts": 1,
+      "durationMs": 1020
+    }
+  ],
+  "outputs": {},
+  "durationMs": 2028
+}

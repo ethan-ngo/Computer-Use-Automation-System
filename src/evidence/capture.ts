@@ -17,6 +17,7 @@
  *     capture time, because pixels cannot be scrubbed afterwards.
  */
 
+import { basename } from 'node:path';
 import type { Surface } from '../surface/surface.js';
 import type { RunEvent, RunLogger } from './types.js';
 
@@ -112,23 +113,38 @@ export class RunEvidence implements StepCapture {
     this.note({
       phase: 'run.end',
       detail: detail ? `failure evidence: ${detail}` : 'failure evidence written',
-      data: { files: written.map((p) => p.split(/[\/]/).pop()) },
+      data: { files: written.map((p) => basename(p)) },
     });
     return written;
   }
 
   /**
-   * The Playwright trace, when the surface has one.
+   * The Playwright trace, when the surface is recording one.
    *
    * Optional on the interface rather than required: a Windows UIA adapter has no such
    * thing, and forcing every surface to pretend would be a worse lie than a missing file.
+   *
+   * **A trace is the one artefact this system cannot redact.** Playwright writes it
+   * directly — request bodies, DOM snapshots, typed values — and nothing passes through
+   * the redactor on the way. A trace taken over a login therefore contains the password in
+   * clear text; that was measured, not assumed. So tracing is opt-in rather than on by
+   * default, the file is gitignored, and saving one emits a loud log line. The alternative
+   * — dropping traces entirely — would remove the single best tool for diagnosing a
+   * LOCATOR_NOT_FOUND, so the trade is: keep it, make it deliberate, never ship it.
    */
   async trace(): Promise<string | undefined> {
     const save = this.surface.saveTrace?.bind(this.surface);
     if (!save) return undefined;
     try {
       const path = this.sink.path('trace.zip');
-      return (await save(path)) ? path : undefined;
+      if (!(await save(path))) return undefined;
+      this.note({
+        phase: 'error',
+        detail:
+          'trace.zip written — NOT redacted (Playwright writes it directly, and it ' +
+          'contains request bodies and typed values in clear text). Do not commit or share it.',
+      });
+      return path;
     } catch (error) {
       this.note({
         phase: 'error',
