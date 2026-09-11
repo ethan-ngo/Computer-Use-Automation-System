@@ -196,7 +196,7 @@ async function main(): Promise<void> {
     });
 
     report(result);
-    logger.write('result.json', JSON.stringify(redactor.value(result), null, 2));
+    logger.writeJson('result.json', result);
 
     const final = await surface.capture();
     logger.screenshot('final.png', final.screenshot);

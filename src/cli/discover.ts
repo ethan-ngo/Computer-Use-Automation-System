@@ -180,7 +180,7 @@ async function main(): Promise<void> {
       onProgress: (note) => console.log(`  ${note}`),
     });
 
-    logger.write('discovery.json', JSON.stringify(redactor.value(log), null, 2));
+    logger.writeJson('discovery.json', log);
 
     // The final page, whatever it is. A run that stopped on no-progress is exactly the
     // one whose last screenshot is worth having.
@@ -209,7 +209,7 @@ async function main(): Promise<void> {
       ...(args.id ? { id: args.id } : {}),
     });
     const file = await saveArtifact(artifact);
-    logger.write('artifact.json', JSON.stringify(artifact, null, 2));
+    logger.writeJson('artifact.json', artifact);
 
     console.log(`\nrecorded ${artifact.id}@${artifact.version} → ${relative(process.cwd(), file)}`);
     console.log(`  ${artifact.steps.length} steps, ${Object.keys(artifact.outputs).length} outputs`);

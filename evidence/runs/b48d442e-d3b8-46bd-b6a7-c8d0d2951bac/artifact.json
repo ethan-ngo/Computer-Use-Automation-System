@@ -45,7 +45,7 @@
         ],
         "description": "enter password — textbox \"password\"",
         "rationale": "Primary is label, verified unique against the 35 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
-        "confidence": 0.«redacted»
+        "confidence": 0.85
       },
       "extract": [],
       "onError": [],
@@ -80,7 +80,7 @@
         ],
         "description": "enter username — textbox \"username\"",
         "rationale": "Primary is label, verified unique against the 35 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
-        "confidence": 0.«redacted»
+        "confidence": 0.85
       },
       "extract": [],
       "onError": [],
@@ -201,7 +201,7 @@
         ],
         "description": "select SAVINGS account type — combobox \"What type of Account would you like to open?\"",
         "rationale": "Primary is label, verified unique against the 30 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
-        "confidence": 0.«redacted»
+        "confidence": 0.85
       },
       "extract": [],
       "onError": [],
@@ -256,7 +256,7 @@
             ],
             "description": "The account number of the newly opened SAVINGS account — combobox \"What type of Account would you like to open?\"",
             "rationale": "Primary is label, verified unique against the 30 elements observed on this page. 2 fallbacks recorded, ending in the CSS path. Role and accessible name are preferred because they survive restyling and are the vocabulary a desktop adapter also exposes.",
-            "confidence": 0.«redacted»
+            "confidence": 0.85
           },
           "as": "string"
         }

@@ -44,6 +44,22 @@ export class FileRunLogger implements RunLogger {
     return path;
   }
 
+  /**
+   * Any run-scoped JSON document.
+   *
+   * Redaction happens on the *structure*, then the result is serialised — never the other
+   * way round. Scrubbing serialised JSON as text treats numbers as candidate secrets, and
+   * the card-number pattern (13-19 digits) matches the mantissa of an ordinary float:
+   * a step `confidence` of `0.8500000000000001` was written as `0.«redacted»`, which is
+   * not JSON at all. The recorded artifact is the deliverable of a discovery run, so an
+   * artifact that no longer parses is the whole run lost.
+   */
+  writeJson(name: string, value: unknown): string {
+    const path = join(this.dir, name);
+    writeFileSync(path, JSON.stringify(this.redactor.value(value), null, 2), 'utf-8');
+    return path;
+  }
+
   /** Screenshots are bytes, not text: masking happens at capture, not here. */
   screenshot(name: string, png: Buffer): string {
     const path = join(this.dir, 'steps', name);
