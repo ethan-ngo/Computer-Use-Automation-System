@@ -15,7 +15,7 @@
     "discover": "tsx --env-file-if-exists=.env src/cli/discover.ts",
     "replay": "tsx --env-file-if-exists=.env src/cli/replay.ts",
     "operator": "tsx --env-file-if-exists=.env src/cli/operator.ts",
-    "agent-demo": "tsx src/cli/agent-demo.ts",
+    "agent-demo": "tsx --env-file-if-exists=.env src/cli/agent-demo.ts",
     "catalog": "tsx src/cli/catalog.ts",
     "fixtures:serve": "tsx src/cli/serve-fixtures.ts",
     "fixtures:capture": "tsx --env-file-if-exists=.env src/cli/capture-fixtures.ts"

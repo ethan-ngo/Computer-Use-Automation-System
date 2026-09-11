@@ -260,9 +260,34 @@ evidenced live in `evidence/runs/9b9b3d06`.
 
 ## M10 — Catalog (stretch)
 
-- [ ] `src/catalog/catalog.ts` — read `capabilities/*.json`, emit Claude tool definitions from each artifact's `inputs` JSON Schema (via `zod-to-json-schema`)
-- [ ] `src/catalog/invoke.ts` — validate args against the schema, run replay, return the typed result
-- [ ] `src/cli/agent-demo.ts` — Claude asked in natural language to open a savings account, finds the capability, invokes it
+- [x] `src/catalog/catalog.ts` — tool definitions **derived** from the artifacts, never
+      maintained alongside them, so a capability cannot drift out of sync with its own
+      contract. The description advertises three things the caller cannot infer: the typed
+      outputs, the **declared business outcomes with "must NOT be retried"**, and
+      irreversibility plus the approval requirement. Dotted capability ids are translated to
+      API-legal tool names here rather than constraining the id format to whatever one API
+      accepts — the same artifact has to be addressable from a queue and an HTTP route too.
+- [x] `src/catalog/invoke.ts` — validate, replay, return a typed result. **A business
+      outcome comes back as `ok: true`**; `ok: false` is reserved for the automation being
+      broken. The invoke boundary is the last place that distinction could be collapsed.
+      Two gates: sensitive inputs are refused even when a schema declares one (the tool
+      definition's omission is a description, not a control), and the default approval hook
+      *declines*, so an irreversible step escalates rather than being authorised by the
+      agent that requested it.
+- [x] `src/cli/catalog.ts` — the review surface: what a model is handed, printed from the
+      artifacts. `--json` for the raw definitions.
+- [x] `src/cli/agent-demo.ts` — verified live against fixtures. Asked "please open me a new
+      savings account and tell me the new account number", with no knowledge that ParaBank
+      exists, the agent chose `parabank_open-savings-account`, and on `LOGIN_REJECTED`
+      answered: *"This isn't something I can retry; the credentials in the vault will need to
+      be corrected first."* The catalog description is what taught it that, and it is the
+      whole argument executable in one command.
+- [x] `agent-demo` now loads `.env` like the other CLIs; it was the only script that did not.
+- [x] Tests (`tests/catalog.test.ts`, 11): a credential can never be passed by a caller and
+      never appears in a tool definition; outcomes are advertised as non-retryable; the
+      artifact version is pinned into the description so a stale tool is visible; arguments
+      are validated before a browser opens; every committed capability gets a distinct,
+      API-legal name that round-trips back to its id
 
 ## M11 — Docs + verification
 
