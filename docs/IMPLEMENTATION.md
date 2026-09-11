@@ -200,9 +200,26 @@ transfer happened between the operator handing the session back and automation p
 ## M9 — Evidence
 
 - [x] `src/evidence/logger.ts` — `run.jsonl` (ts, phase, stepId, action, **which locator strategy resolved**, durationMs, outcome); every event passes through the redactor at the single write boundary. Written early because M4 needed it.
-- [ ] `src/evidence/capture.ts` — `steps/NNN-{before,after}.png`; on failure `failure.png` + `failure.html` + `failure.aria.yaml` + `trace.zip`
-- [ ] Control-transfer timeline written to the run log
-- [ ] Required deliverables in `evidence/`: one discovery run, one successful replay, one replay hitting an exceptional state (use a real ParaBank business outcome — loan denial or "no transactions found")
+- [x] `src/evidence/capture.ts` — `RunEvidence`: `steps/NNN-{before,after}.png` bracketing
+      the act itself, and on failure `failure.png` + `failure.html` + `failure.aria.yaml` +
+      `trace.zip`. Split from the logger deliberately: the logger is synchronous, cheap and
+      always on; capture is asynchronous, expensive and allowed to fail. **Capture never
+      breaks a run** — every path swallows its own error and logs the miss, which is tested
+      by making `capture()` reject and watching the run still succeed.
+      `Surface.saveTrace?()` is *optional* on the interface rather than required, because a
+      UIA adapter has no equivalent and a stub would turn a real capability difference into
+      a silently empty file.
+- [x] Control-transfer timeline written to the run log — emitted by `LeaseManager` itself
+      via `attachLogger()`, not by the call sites. Same reasoning as the policy check living
+      inside `act()`: a timeline assembled from whichever call sites remembered to log is a
+      sample, not a timeline. Every transfer carries controller, holder and **epoch**.
+- [x] Required deliverables in `evidence/`: one discovery run (`b459913e`), one successful
+      replay (`9b9b3d06`), one replay hitting a real exceptional state (`9367801d`,
+      `LOGIN_REJECTED`). Indexed with their significance in `evidence/README.md`.
+- [x] Tests (`tests/evidence.test.ts`, 8): the before/after pair brackets the act and
+      nothing else; a failing capture loses a screenshot, not the run; the failure bundle
+      writes all three views; no trace is reported as absent rather than as an empty zip;
+      the control-transfer timeline records every controller change with its epoch
 
 ## M10 — Catalog (stretch)
 

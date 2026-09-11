@@ -28,6 +28,7 @@ import type { Observation, SurfaceAction } from '../surface/types.js';
 import type { Policy } from '../policy/policy.js';
 import type { Redactor } from '../policy/redact.js';
 import type { RunEvent, RunLogger } from '../evidence/types.js';
+import type { StepCapture } from '../evidence/capture.js';
 import { evaluate } from './assertions.js';
 import { detectOutcome, type OutcomeHit } from './outcomes.js';
 import { extractAll, DEFAULT_LOCALE, type ExtractedValue, type Locale } from './extract.js';
@@ -171,6 +172,11 @@ export interface ReplayOptions {
   completedSteps?: string[];
   /** Resume support: start here rather than at step 0. */
   startAtStepId?: string;
+  /**
+   * Per-step screenshots. Optional and separate from `logger` because it is asynchronous
+   * and can fail; the event log is neither, and must not be held hostage to a PNG.
+   */
+  capture?: StepCapture;
 }
 
 // ---------------------------------------------------------------------------
@@ -476,7 +482,10 @@ export class ReplayEngine {
     }
 
     // 4. Act — through the chokepoint, which re-checks policy and the lease.
+    //    The before/after screenshots bracket exactly this line, because the pair only
+    //    means anything if nothing else happened between them.
     const action = await this.buildAction(step, ref);
+    await this.opts.capture?.before(step);
     const result = await this.opts.surface.act(action);
     this.log({
       phase: 'step.act',
@@ -509,6 +518,9 @@ export class ReplayEngine {
       intent: step.intent,
       detail: raced.detail,
     });
+    // Taken after the checkpoint rather than straight after the act: the useful "after"
+    // picture is of the page the step was waiting for, not of a spinner.
+    await this.opts.capture?.after(step);
 
     // 6. Extract.
     if (step.extract.length > 0) {

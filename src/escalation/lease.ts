@@ -13,6 +13,7 @@
 
 import { randomUUID } from 'node:crypto';
 import type { SessionLease } from '../surface/types.js';
+import type { RunLogger } from '../evidence/types.js';
 
 export class LeaseConflictError extends Error {
   constructor(message: string) {
@@ -24,6 +25,7 @@ export class LeaseConflictError extends Error {
 export class LeaseManager {
   private state: SessionLease;
   private readonly listeners = new Set<(lease: SessionLease) => void>();
+  private log?: { logger: RunLogger; runId: string };
 
   constructor(sessionId = randomUUID()) {
     this.state = {
@@ -43,6 +45,37 @@ export class LeaseManager {
     return this.state.controller === 'automation';
   }
 
+  /**
+   * Write every transfer to the run log.
+   *
+   * Attached here rather than emitted by the call sites, for the same reason the policy
+   * check lives inside `act()`: a control-transfer timeline assembled from whichever call
+   * sites remembered to log is not a timeline, it is a sample. Every change of controller
+   * passes through `transition()`, so that is where the record is made.
+   */
+  attachLogger(logger: RunLogger, runId: string): this {
+    this.log = { logger, runId };
+    this.emit(this.current, 'session opened');
+    return this;
+  }
+
+  private emit(lease: SessionLease, detail: string): void {
+    if (!this.log) return;
+    void this.log.logger.event({
+      ts: lease.since,
+      phase: 'control.transfer',
+      runId: this.log.runId,
+      detail,
+      data: {
+        controller: lease.controller,
+        holder: lease.holder,
+        epoch: lease.epoch,
+        sessionId: lease.sessionId,
+        expiresAt: lease.expiresAt,
+      },
+    });
+  }
+
   onChange(listener: (lease: SessionLease) => void): () => void {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
@@ -55,6 +88,7 @@ export class LeaseManager {
       epoch: this.state.epoch + 1,
       since: new Date().toISOString(),
     };
+    this.emit(this.state, this.state.reason ?? `controller is now ${this.state.controller}`);
     for (const listener of this.listeners) listener(this.current);
     return this.current;
   }

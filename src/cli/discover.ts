@@ -144,7 +144,7 @@ async function main(): Promise<void> {
   // credential cannot reach the log even if it appears somewhere we did not anticipate.
   const redactor = new Redactor(policy).learnFromEnv();
   const logger = new FileRunLogger(runId, redactor);
-  const leases = new LeaseManager(runId);
+  const leases = new LeaseManager(runId).attachLogger(logger, runId);
 
   const base = new URL(args.target);
   const baseUrl = base.origin;

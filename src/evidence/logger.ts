@@ -32,6 +32,11 @@ export class FileRunLogger implements RunLogger {
     appendFileSync(this.file, JSON.stringify(this.redactor.value(event)) + '\n', 'utf-8');
   }
 
+  /** Where a run-scoped file lives, for writers that produce the file themselves. */
+  path(name: string): string {
+    return join(this.dir, name);
+  }
+
   /** Any run-scoped document — the discovery log, the recorded artifact, a failure page. */
   write(name: string, content: string | Buffer): string {
     const path = join(this.dir, name);
