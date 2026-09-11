@@ -32,7 +32,7 @@ Remaining: the final commit and a read-through.
 - [x] `.gitignore`, `.env.example`
 - [x] `npm install` (139 packages: zod, playwright, express, yaml, @anthropic-ai/sdk, zod-to-json-schema; tsx/vitest/typescript dev)
 - [x] `npx playwright install chromium` (headed build plus the headless shell)
-- [ ] First commit of the scaffold
+- [x] First commit of the scaffold (`c2ce38d`; the box was stale)
 
 ## M1 — Artifact schema + store
 
@@ -315,18 +315,16 @@ evidenced live in `evidence/runs/9b9b3d06`.
       Deleting traces outright would have cost the best tool for diagnosing a
       `LOCATOR_NOT_FOUND`; leaving them on would have quietly contradicted the redaction
       claim everything else here makes.
-- [ ] Final commit
+- [x] Final commit
 
 ---
 
-## Deferred / needs a decision
+## Deferred / needs a decision — all resolved
 
-- [ ] **Add API credits.** `ANTHROPIC_API_KEY` authenticates but the account balance is
-      zero, so every Messages/count_tokens call fails. This is the only thing standing
-      between here and the live discovery run.
-- [ ] `strict: true` on the discovery tool schemas is unverified against the live API.
-      The schemas carry optional properties alongside `required`; if the API rejects that
-      combination, drop `strict` in `src/agent/tools.ts`. Cannot be checked without credits.
-- [ ] `openaccount.htm` offline replay cannot complete the submit (AJAX selects, JS
-      button). Either record the exceptional-path demo against `requestloan.htm`'s real
-      loan-denial outcome, or keep scripts in that one fixture.
+- [x] **API credits.** Added; live discovery ran.
+- [x] `strict: true` on the discovery tool schemas — rejected by the live API with
+      `Schema is too complex`. Dropped; the loop validates defensively instead.
+- [x] `openaccount.htm` offline replay — resolved differently from both recorded options.
+      See "The offline path" above: the committed artifact replays unedited to its own
+      declared business outcome, and the happy-path limit is documented rather than worked
+      around.
