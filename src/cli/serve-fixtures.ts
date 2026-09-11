@@ -17,6 +17,7 @@
 import express from 'express';
 import { readFile, readdir } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const PORT = Number(process.env.FIXTURE_PORT ?? 8787);
 const ROOT = resolve(process.cwd(), 'fixtures', 'parabank');
@@ -30,7 +31,7 @@ const ROOT = resolve(process.cwd(), 'fixtures', 'parabank');
  * how the offline suite exercises a business outcome without needing the live app to be
  * in an unhappy state.
  */
-type Routes = Record<string, string>;
+export type Routes = Record<string, string>;
 
 async function loadRoutes(): Promise<Routes> {
   try {
@@ -40,7 +41,18 @@ async function loadRoutes(): Promise<Routes> {
   }
 }
 
-async function fileFor(routes: Routes, method: string, path: string): Promise<string | undefined> {
+/**
+ * ParaBank puts the session in the *path* (`login.htm;jsessionid=AB6C…`), so the captured
+ * HTML has one particular session frozen into every form action. A replay server must not
+ * care which session a capture was taken in — the alternative is re-capturing fixtures
+ * whenever a session id changes, which defeats the point of having them.
+ */
+export function canonicalPath(path: string): string {
+  return path.replace(/;[^/]*/g, '');
+}
+
+async function fileFor(routes: Routes, method: string, rawPath: string): Promise<string | undefined> {
+  const path = canonicalPath(rawPath);
   const exact = routes[`${method} ${path}`] ?? routes[`* ${path}`];
   if (exact) return exact;
 
@@ -52,8 +64,14 @@ async function fileFor(routes: Routes, method: string, path: string): Promise<st
   return names.find((n) => n === base || n === `${base}.html` || n.replace(/\.html$/, '') === base);
 }
 
-export async function createFixtureApp(): Promise<express.Express> {
-  const routes = await loadRoutes();
+/**
+ * `overrides` is how the offline suite reaches an exceptional state: point `POST
+ * /parabank/login.htm` at the captured rejection page instead of the overview, and the
+ * *same artifact*, unedited, returns its declared business outcome. The app under test
+ * does not change; the world it is replayed against does.
+ */
+export async function createFixtureApp(overrides: Routes = {}): Promise<express.Express> {
+  const routes = { ...(await loadRoutes()), ...overrides };
   const app = express();
   app.use(express.urlencoded({ extended: false }));
 
@@ -73,10 +91,26 @@ export async function createFixtureApp(): Promise<express.Express> {
   return app;
 }
 
-if (import.meta.url === `file://${process.argv[1]?.replace(/\\/g, '/')}`) {
-  const app = await createFixtureApp();
+// pathToFileURL rather than a hand-built string: on Windows a path is "C:\…", so the
+// concatenated URL comes out with two slashes where import.meta.url has three. The guard
+// then silently never fires and the server starts nothing, with no error to show for it.
+// The same bug was already fixed in capture-fixtures.ts; this copy had been missed, which
+// is why `npm run fixtures:serve` exited 0 and served nothing.
+const entry = process.argv[1];
+if (entry && import.meta.url === pathToFileURL(entry).href) {
+  /*
+   * `--reject-login` serves the captured rejection page for the login POST, which is how
+   * the documented offline demo reaches a business outcome. A flag rather than the default
+   * because the two worlds should be chosen deliberately: a reviewer running the offline
+   * path needs to know which one they are in.
+   */
+  const rejectLogin = process.argv.includes('--reject-login');
+  const app = await createFixtureApp(
+    rejectLogin ? { 'POST /parabank/login.htm': 'login-rejected.htm' } : {},
+  );
   app.listen(PORT, '127.0.0.1', () => {
     console.log(`fixtures for ${ROOT}`);
     console.log(`serving on http://127.0.0.1:${PORT}/parabank/index.htm`);
+    if (rejectLogin) console.log('login POSTs answer with the captured rejection page');
   });
 }

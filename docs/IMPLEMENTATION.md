@@ -221,6 +221,43 @@ transfer happened between the operator handing the session back and automation p
       writes all three views; no trace is reported as absent rather than as an empty zip;
       the control-transfer timeline records every controller change with its epoch
 
+## The offline path — decided and built
+
+The plan left a fork open: `openaccount.htm`'s AJAX selects and JS submit mean the *happy*
+path cannot complete offline. Both recorded options were wrong for the same reason — they
+would have demonstrated a different flow than the one the system actually discovered.
+
+What landed instead: replay **the committed discovered artifact, unedited**, against the
+fixtures, and let it reach its *declared business outcome*. ParaBank's login leg is a plain
+server-rendered form POST, so it works offline; `fixtures/parabank/login-rejected.htm` is
+the page the live bank really served on a wrong password (lifted from the `124db8ff`
+evidence run), and the route table decides which world the artifact is replayed into.
+
+- [x] `createFixtureApp(overrides)` — a route override is how the offline suite reaches an
+      exceptional state. The artifact does not change; the world it replays into does.
+- [x] `canonicalPath()` strips `;jsessionid=…` — ParaBank puts the session in the *path*, so
+      every captured form action has one frozen session id in it. A replay server must not
+      care which session a capture was taken in.
+- [x] `--reject-login` on `fixtures:serve`, so the documented offline demo is one flag, and
+      a reviewer always knows which world they are in.
+- [x] **The Windows entrypoint guard bug was still in `serve-fixtures.ts`.** `npm run
+      fixtures:serve` exited 0 and served nothing. Same `file://` vs `file:///` cause as the
+      one fixed in `capture-fixtures.ts`; that fix had never been copied across.
+- [x] `tests/offline-replay.test.ts` (2) — a real browser, real captured HTML, a real form
+      POST, the committed artifact. `business_outcome LOGIN_REJECTED` in **1.6s**; all three
+      locators resolved on their **primary** strategy against a different origin, which is
+      the artifact's portability being measured rather than asserted. Its contrast pair —
+      the same pages, the same run, outcomes stripped — **escalates after 16.6s**. That is
+      the live measurement, reproduced on a laptop with no network.
+- [x] CLI demo verified: `npm run replay -- --capability parabank.open-savings-account
+      --fixtures --headless` → `business_outcome` in 1.4s, exit 0, with per-step before/after
+      screenshots on disk (`evidence/runs/e1bab268…`).
+
+**Known limit, stated rather than papered over:** the offline path cannot complete the
+account-opening steps, because ParaBank's authenticated pages populate over AJAX and submit
+through JavaScript. That is a property of the app, not of the design, and the happy path is
+evidenced live in `evidence/runs/9b9b3d06`.
+
 ## M10 — Catalog (stretch)
 
 - [ ] `src/catalog/catalog.ts` — read `capabilities/*.json`, emit Claude tool definitions from each artifact's `inputs` JSON Schema (via `zod-to-json-schema`)
