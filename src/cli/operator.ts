@@ -67,7 +67,17 @@ async function main(): Promise<void> {
     trace: process.argv.includes('--trace'),
   });
 
-  const ui = await startConsole({ broker, leases, surface, port: Number(arg('port', '8788')) });
+  // The surface is already open, and the `finally` that closes it only covers the loop
+  // below — so a console that cannot bind has to clean up the browser on its way out.
+  const ui = await startConsole({
+    broker,
+    leases,
+    surface,
+    port: Number(arg('port', '8788')),
+  }).catch(async (error) => {
+    await surface.close();
+    throw error;
+  });
 
   console.log(`run ${runId}`);
   console.log(`  capability: ${capability.artifact.id}@${capability.artifact.version}`);
@@ -252,7 +262,7 @@ function report(result: ReplayResult, logger: FileRunLogger): void {
   if (Object.keys(result.outputs).length > 0) {
     console.log(`\n  outputs: ${JSON.stringify(result.outputs)}`);
   }
-  logger.write('result.json', JSON.stringify(result, null, 2));
+  logger.writeJson('result.json', result);
 }
 
 main().catch((error: unknown) => {

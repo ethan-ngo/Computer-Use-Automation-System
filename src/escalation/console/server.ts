@@ -118,8 +118,38 @@ export async function startConsole(opts: ConsoleOptions): Promise<RunningConsole
   });
 
   const server: Server = createServer(app);
-  const port = opts.port ?? 8788;
-  await new Promise<void>((resolve) => server.listen(port, resolve));
+  const requested = opts.port ?? 8788;
+
+  /*
+   * `listen` reports failure by emitting 'error', not by throwing — and with no listener
+   * attached that is an unhandled 'error' event, which takes the whole process down at the
+   * point of the emit. The operator CLI has a *headed browser already open* by the time it
+   * gets here, so the crash strands a Chrome window and prints a net.js stack instead of
+   * the one thing worth saying: the port is taken, pass `--port`. A leftover operator run
+   * from an earlier session is the ordinary cause, not an exotic one.
+   */
+  await new Promise<void>((resolve, reject) => {
+    const onError = (error: NodeJS.ErrnoException) => {
+      server.close();
+      reject(
+        error.code === 'EADDRINUSE'
+          ? new Error(
+              `operator console: port ${requested} is already in use — another run is probably ` +
+                `still holding it. Stop it, or start this one with --port <other>.`,
+            )
+          : error,
+      );
+    };
+    server.once('error', onError);
+    server.listen(requested, () => {
+      server.removeListener('error', onError);
+      resolve();
+    });
+  });
+
+  // Port 0 means "any free port", so the bound port is only knowable after listen resolves.
+  const address = server.address();
+  const port = typeof address === 'object' && address ? address.port : requested;
 
   return {
     url: `http://127.0.0.1:${port}`,
