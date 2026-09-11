@@ -3,10 +3,11 @@
 Execution tracker for `docs/PLAN.md`. Check items off as they complete.
 Resume rule: find the first unchecked box, do that.
 
-**State as of last session:** M0-M8 complete plus `src/cli/replay.ts` — 130 tests green,
-typecheck clean. **Discover → record → replay is verified end to end against live
-ParaBank**, in all three terminal states: success, business outcome, and escalation.
-Next code action is M9 (evidence capture), then M10/M11.
+**State:** M0-M11 complete. 151 tests green, typecheck clean. Discover → record → replay is
+verified end to end against live ParaBank in all three terminal states; the offline path
+replays the same artifact unedited against captured HTML; the catalog closes the loop with
+an agent invoking a capability from natural language. README.md and REPORT.md are written.
+Remaining: the final commit and a read-through.
 
 **Environment notes**
 - Node v23.7.0, npm 11.6.2, git 2.39.2 — all present.
@@ -291,12 +292,29 @@ evidenced live in `evidence/runs/9b9b3d06`.
 
 ## M11 — Docs + verification
 
-- [ ] `README.md` — setup, the demo path, **how to run with no live services** (fixtures)
-- [ ] `REPORT.md` — the seven exact headings from brief §6; §4/§5/§6 draw on the expanded sections in `docs/PLAN.md`
-- [ ] `npm run typecheck` clean
-- [ ] `npm test` — full suite green
-- [ ] Offline integration replay against fixtures passes
-- [ ] Live end-to-end demo path runs
+- [x] `README.md` — setup, the offline path first (it is the one a reviewer will actually
+      run), then the live demo path, the repository map, evidence, and safety.
+- [x] `REPORT.md` — the seven headings, taken from the brief itself rather than from memory:
+      Architecture · Artifact schema · Determinism & error handling · Heterogeneity &
+      multi-tenant · Escalation & handoff · Safety · Cuts. (The PDF needed `pypdf` to read;
+      the headings are quoted exactly.)
+- [x] `npm run typecheck` clean
+- [x] `npm test` — 151 tests green in ~20s, no network and no API key required
+- [x] Offline integration replay against fixtures passes — see the section above
+- [x] Live demo path verified: `npm run replay --approve deny` against live ParaBank logged
+      in, resolved all three steps on **primary** locators, and the **approval gate stopped
+      the irreversible step** — exit 2 with the full failure bundle written. Deliberately
+      `deny` rather than `auto`: re-verifying the happy path would open another real account
+      on somebody's public demo, and that path is already evidenced in `9b9b3d06`.
+- [x] **Found while verifying: the Playwright trace contained the password in clear text.**
+      Measured, not assumed — three entries of `trace.zip` (`trace.trace`, `trace.network`,
+      and a resource blob). A trace is the one artefact the redactor cannot reach, because
+      Playwright writes it directly. Tracing is now **opt-in** (`--trace`, off everywhere by
+      default and never for an agent-driven invoke), the file stays gitignored, and saving
+      one writes a loud line into the run log. Tested, and stated in README + REPORT §6.
+      Deleting traces outright would have cost the best tool for diagnosing a
+      `LOCATOR_NOT_FOUND`; leaving them on would have quietly contradicted the redaction
+      claim everything else here makes.
 - [ ] Final commit
 
 ---

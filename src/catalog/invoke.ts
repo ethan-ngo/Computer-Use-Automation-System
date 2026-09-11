@@ -124,7 +124,8 @@ export async function invoke(options: InvokeOptions): Promise<InvocationResult> 
     leases,
     extraOrigins: [baseUrl],
     headless: options.headless ?? true,
-    trace: true,
+    // Never for an agent-driven run: a trace cannot be redacted, and nobody is watching.
+    trace: false,
   });
   const evidence = new RunEvidence(surface, logger, runId, logger);
 

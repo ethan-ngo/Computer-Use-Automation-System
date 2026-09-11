@@ -172,8 +172,9 @@ describe('per-step capture', () => {
     await expect(evidence.trace()).resolves.toBeUndefined();
   });
 
-  it('saves the trace alongside the bundle when the surface records one', async () => {
+  it('saves the trace alongside the bundle, and says out loud that it is not redacted', async () => {
     const sink = new MemorySink();
+    const logger = new MemoryLogger();
     const saved: string[] = [];
     const traced = wrap(surfaceThatNavigates(), {
       saveTrace: async (path: string) => {
@@ -182,10 +183,17 @@ describe('per-step capture', () => {
       },
     });
 
-    const files = await new RunEvidence(traced, sink, 'run-1').failure();
+    const files = await new RunEvidence(traced, sink, 'run-1', logger).failure();
 
     expect(saved).toEqual(['/evidence/trace.zip']);
     expect(files).toContain('/evidence/trace.zip');
+
+    // A trace is the one artefact the redactor cannot reach — Playwright writes request
+    // bodies and typed values into it verbatim, which was measured against a real login,
+    // not assumed. Tracing is therefore opt-in, the file is gitignored, and the run log
+    // has to be explicit about what is now sitting on disk.
+    const warning = logger.phases('error').map((e) => e.detail ?? '');
+    expect(warning.some((d) => d.includes('NOT redacted'))).toBe(true);
   });
 
   it('NO_CAPTURE is a real no-op, so a fixture run costs nothing', async () => {

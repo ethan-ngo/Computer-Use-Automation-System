@@ -61,7 +61,10 @@ async function main(): Promise<void> {
     // Headed by default. The whole point of a handoff is that the operator gets *this*
     // session, with its cookies and its half-filled form — not a fresh one.
     headless,
-    trace: true,
+    // Opt-in: see the note in replay.ts. A trace of an *intervention* is the worst case —
+    // it would capture what the human typed, which the human-action recorder goes out of
+    // its way to reduce to a shape before it ever leaves the page.
+    trace: process.argv.includes('--trace'),
   });
 
   const ui = await startConsole({ broker, leases, surface, port: Number(arg('port', '8788')) });
