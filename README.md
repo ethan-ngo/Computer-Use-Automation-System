@@ -60,6 +60,8 @@ business_outcome  (1395ms)
   This is a result, not a failure. Exit code 0.
 ```
 
+![Offline replay: the recorded capability fills the login form with no model in the loop (the password field is masked in evidence), submits it, and reports LOGIN_REJECTED as a business outcome with exit code 0](evidence/offline-replay.gif)
+
 That is **the artifact recorded against the live bank, unedited, replaying against captured
 HTML on a different origin** — every locator resolving on its primary strategy. The pages
 are real: `fixtures/parabank/login-rejected.htm` is what the live bank actually served on a
