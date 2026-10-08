@@ -29,7 +29,7 @@ log, or a screenshot — see [Safety](#safety).
 
 ```bash
 npm run typecheck
-npm test                    # 151 tests, ~20s, no network and no API key needed
+npm test                    # 158 tests, ~20s, no network and no API key needed
 ```
 
 ---

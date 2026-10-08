@@ -9,7 +9,7 @@
  * goal and the step's intent, and shows the error class only as a footnote.
  */
 
-export const PAGE = String.raw`<!doctype html>
+export const PAGE = `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -88,6 +88,9 @@ export const PAGE = String.raw`<!doctype html>
 const $ = (id) => document.getElementById(id);
 let selected = null;
 let lease = null;
+// Notes being typed, per intervention. The detail panel is rebuilt on every poll, so the
+// draft has to live outside it or the operator's note is wiped mid-sentence.
+const drafts = {};
 
 async function api(path, options) {
   const res = await fetch(path, options);
@@ -138,6 +141,9 @@ async function render() {
   const iHold = lease && lease.controller === 'human';
   const done = r.status === 'resolved' || r.status === 'expired';
 
+  const prevNote = $('note');
+  const noteFocused = prevNote !== null && document.activeElement === prevNote;
+
   $('detail').innerHTML = \`
     <dl>
       <dt>Goal</dt><dd>\${esc(r.goal)}</dd>
@@ -164,6 +170,10 @@ async function render() {
   \`;
 
   if (done) return;
+  const noteEl = $('note');
+  noteEl.value = drafts[r.id] || '';
+  noteEl.oninput = () => { drafts[r.id] = noteEl.value; };
+  if (noteFocused) noteEl.focus();
   const note = () => $('note')?.value || '';
   const act = (fn) => async () => { try { await fn(); } catch (e) { alert(e.message); } finally { refresh(); } };
 

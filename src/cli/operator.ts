@@ -98,6 +98,12 @@ async function main(): Promise<void> {
   let startAtStepId: string | undefined;
 
   try {
+    // Getting to the entry point is the harness's job, not the engine's — see replay.ts.
+    await surface.act({
+      type: 'navigate',
+      url: new URL(capability.artifact.target.entryPoint, baseUrl).toString(),
+    });
+
     for (let attempt = 1; ; attempt++) {
       const engine = new ReplayEngine({
         capability,
