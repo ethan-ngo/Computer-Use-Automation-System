@@ -141,6 +141,10 @@ than trusting what it was told, and advances rather than repeating.
 While a human holds the session, automation is *incapable* of acting — the lease is checked
 at the same chokepoint as the policy, so this is enforced rather than agreed.
 
+![Operator console: a replay escalates with its goal, step, expected and observed state, and the operator takes control of the live session (lease moves to the operator, epoch 1)](evidence/operator-handoff.gif)
+
+*A replay against the offline fixtures escalates at a failed checkpoint. The console shows what the run was trying to do, what it expected and what it observed; **Take control** moves the session lease to the operator, after which automation cannot act until it is handed back.*
+
 ### 4. Catalog — the capability as an agent tool
 
 ```bash
